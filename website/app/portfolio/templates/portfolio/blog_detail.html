@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>{{ post.title }}</h1>
+{% if post.cover_image %}<img src="{{ post.cover_image.url }}" style="max-width:400px;" />{% endif %}
+<p><em>Published: {{ post.published_at }}</em></p>
+<div>{{ post.content|linebreaks }}</div>
+{% endblock %}
