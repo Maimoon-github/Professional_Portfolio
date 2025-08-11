@@ -44,8 +44,7 @@ INSTALLED_APPS = [
     'app.portfolio.apps.PortfolioConfig',  # Custom app for portfolio (AppConfig)
     'taggit',  # Tagging
     'simple_history',  # Content versioning
-    # 'apps.blog',  # Uncomment if you have a blog app
-    # 'rest_framework',  # Uncomment if using Django REST Framework for APIs
+    'rest_framework',  # API framework
 ]
 
 MIDDLEWARE = [
@@ -135,3 +134,11 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 20,
+}

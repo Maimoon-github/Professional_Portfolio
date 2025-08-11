@@ -74,6 +74,37 @@ class BlogPostAdmin(admin.ModelAdmin):
 		queryset.update(status=models.BlogPost.DRAFT)
 
 
+@admin.register(models.NewsItem)
+class NewsItemAdmin(admin.ModelAdmin):
+	list_display = ('title', 'status', 'important', 'category', 'published_at')
+	list_filter = ('status', 'important', 'category')
+	search_fields = ('title', 'summary', 'content')
+	prepopulated_fields = {"slug": ("title",)}
+	autocomplete_fields = ('category', 'author')
+	actions = ['make_published', 'make_draft', 'mark_important', 'unmark_important']
+	fieldsets = (
+		(None, {"fields": ("title", "slug", "summary", "content", "category", "link", "important")}),
+		("Publication", {"fields": ("status", "published_at", "author")}),
+	)
+
+	@admin.action(description="Publish selected news")
+	def make_published(self, request, queryset):
+		for obj in queryset:
+			obj.publish()
+
+	@admin.action(description="Move selected to draft")
+	def make_draft(self, request, queryset):
+		queryset.update(status=models.NewsItem.DRAFT)
+
+	@admin.action(description="Mark important")
+	def mark_important(self, request, queryset):
+		queryset.update(important=True)
+
+	@admin.action(description="Unmark important")
+	def unmark_important(self, request, queryset):
+		queryset.update(important=False)
+
+
 @admin.register(models.Skill)
 class SkillAdmin(admin.ModelAdmin):
 	list_display = ('name', 'category', 'proficiency', 'order')

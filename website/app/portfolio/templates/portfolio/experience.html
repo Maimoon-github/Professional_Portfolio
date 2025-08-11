@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Experience{% endblock %}
+
+{% block content %}
+<section class="my-5">
+    <div class="container">
+        <h2 class="mb-4">Professional Experience</h2>
+        <ul class="list-group mb-4">
+            {% for exp in experiences %}
+            <li class="list-group-item">
+                <strong>{{ exp.role }}</strong> - {{ exp.company }} ({{ exp.start_date }} - {% if exp.is_current %}Present{% else %}{{ exp.end_date }}{% endif %})
+                <div class="small text-muted">{{ exp.description|truncatewords:30 }}</div>
+            </li>
+            {% empty %}<li class="list-group-item">No experiences yet.</li>{% endfor %}
+        </ul>
+        <h3>Skills</h3>
+        <div class="row">
+            {% for skill in skills %}
+            <div class="col-md-3 mb-2">
+                <div class="border p-2 h-100 small">{{ skill.name }}<div class="progress mt-1" style="height:6px;"><div class="progress-bar" role="progressbar" style="width: {{ skill.proficiency }}%" aria-valuenow="{{ skill.proficiency }}" aria-valuemin="0" aria-valuemax="100"></div></div></div>
+            </div>
+            {% empty %}<p>No skills listed.</p>{% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

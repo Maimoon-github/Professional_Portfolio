@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<h1>Content Dashboard</h1>
+<div class="row">
+  <div class="col-md-3"><div class="card mb-3"><div class="card-body text-center"><h2>{{ project_count }}</h2><p>Projects</p><a href="/admin/portfolio/project/" class="btn btn-sm btn-outline-primary">Manage</a></div></div></div>
+  <div class="col-md-3"><div class="card mb-3"><div class="card-body text-center"><h2>{{ blog_count }}</h2><p>Blog Posts</p><a href="/admin/portfolio/blogpost/" class="btn btn-sm btn-outline-primary">Manage</a></div></div></div>
+  <div class="col-md-3"><div class="card mb-3"><div class="card-body text-center"><h2>{{ news_count }}</h2><p>News Items</p><a href="/admin/portfolio/newsitem/" class="btn btn-sm btn-outline-primary">Manage</a></div></div></div>
+</div>
+<p><a href="/admin/" class="btn btn-secondary">Go to Django Admin</a></p>
+{% endblock %}

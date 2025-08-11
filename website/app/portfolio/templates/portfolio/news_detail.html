@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block title %}News: {{ item.title }}{% endblock %}
+{% block content %}
+<h1>{{ item.title }}</h1>
+<p class="text-muted">{{ item.published_at }}</p>
+<p>{{ item.summary }}</p>
+<div>{{ item.content|linebreaks }}</div>
+{% if item.link %}<p><a href="{{ item.link }}" target="_blank">Related Link</a></p>{% endif %}
+{% endblock %}

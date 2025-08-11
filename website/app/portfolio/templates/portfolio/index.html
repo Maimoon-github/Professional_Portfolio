@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="text-center mt-5">
+        <h1>Welcome to My Data Scientist Portfolio</h1>
+        <p class="lead">Showcase of projects, research, and insights in data science and technology.</p>
+        <a href="{% url 'portfolio:project_list' %}" class="btn btn-primary mt-3">Explore Portfolio</a>
+</div>
+
+<section class="mt-5">
+    <h2>Featured Projects</h2>
+    <div class="row">
+        {% for p in featured_projects %}
+            <div class="col-md-4 mb-3">
+                <div class="card h-100">
+                    {% if p.hero_image %}<img src="{{ p.hero_image.url }}" class="card-img-top" style="max-height:140px;object-fit:cover;">{% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title"><a href="{{ p.get_absolute_url }}">{{ p.title }}</a></h5>
+                        <p class="card-text small">{{ p.summary|default:p.description|truncatewords:20 }}</p>
+                    </div>
+                </div>
+            </div>
+        {% empty %}<p>No featured projects yet.</p>{% endfor %}
+    </div>
+</section>
+
+<section class="mt-5">
+    <h2>Recent Blog Posts</h2>
+    <ul>
+        {% for post in recent_posts %}
+            <li><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></li>
+        {% empty %}<li>No posts yet.</li>{% endfor %}
+    </ul>
+</section>
+
+<section class="mt-5">
+    <h2>Latest News</h2>
+    <ul>
+        {% for n in latest_news %}
+            <li><a href="{{ n.get_absolute_url }}">{{ n.title }}</a>{% if n.important %} <strong class="text-danger">*</strong>{% endif %}</li>
+        {% empty %}<li>No news items.</li>{% endfor %}
+    </ul>
+</section>
+{% endblock %}
