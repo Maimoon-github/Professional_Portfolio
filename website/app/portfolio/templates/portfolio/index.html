@@ -1,16 +1,22 @@
 {% extends "base.html" %}
 
-{% block title %}Home{% endblock %}
+{% block title %}Portfolio{% endblock %}
 
 {% block content %}
-<div class="text-center mt-5">
-        <h1>Welcome to My Data Scientist Portfolio</h1>
-        <p class="lead">Showcase of projects, research, and insights in data science and technology.</p>
-        <a href="{% url 'portfolio:project_list' %}" class="btn btn-primary mt-3">Explore Portfolio</a>
-</div>
+<header class="text-center mt-5">
+    <h1 class="display-5 fw-bold">Data Science & AI Portfolio</h1>
+    <p class="lead mb-4">Projects, research, writing, and updates across data science, machine learning, and analytics.</p>
+    <div>
+        <a href="{% url 'portfolio:project_list' %}" class="btn btn-primary btn-lg me-2">View All Projects</a>
+        <a href="{% url 'portfolio:experience' %}" class="btn btn-outline-secondary btn-lg">Experience & Skills</a>
+    </div>
+</header>
 
-<section class="mt-5">
-    <h2>Featured Projects</h2>
+<section id="featured-projects" class="mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="h4 mb-0">Featured Projects</h2>
+        <a href="{% url 'portfolio:project_list' %}" class="small">See all</a>
+    </div>
     <div class="row">
         {% for p in featured_projects %}
             <div class="col-md-4 mb-3">
@@ -19,6 +25,7 @@
                     <div class="card-body">
                         <h5 class="card-title"><a href="{{ p.get_absolute_url }}">{{ p.title }}</a></h5>
                         <p class="card-text small">{{ p.summary|default:p.description|truncatewords:20 }}</p>
+                        <a href="{{ p.get_absolute_url }}" class="stretched-link"></a>
                     </div>
                 </div>
             </div>
@@ -26,21 +33,32 @@
     </div>
 </section>
 
-<section class="mt-5">
-    <h2>Recent Blog Posts</h2>
-    <ul>
+<section id="recent-posts" class="mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-2">
+        <h2 class="h4 mb-0">Recent Writing</h2>
+        <a href="{% url 'portfolio:blog_list' %}" class="small">All posts</a>
+    </div>
+    <div class="list-group">
         {% for post in recent_posts %}
-            <li><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></li>
-        {% empty %}<li>No posts yet.</li>{% endfor %}
-    </ul>
+            <a href="{{ post.get_absolute_url }}" class="list-group-item list-group-item-action">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">{{ post.title }}</h5>
+                </div>
+                <p class="mb-1 small text-muted">{{ post.summary|default:post.content|truncatewords:22 }}</p>
+            </a>
+        {% empty %}<div class="text-muted small">No posts yet.</div>{% endfor %}
+    </div>
 </section>
 
-<section class="mt-5">
-    <h2>Latest News</h2>
-    <ul>
+<section id="latest-news" class="mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-2">
+        <h2 class="h4 mb-0">Latest Updates</h2>
+        <a href="{% url 'portfolio:news' %}" class="small">All news</a>
+    </div>
+    <ul class="list-unstyled mb-0">
         {% for n in latest_news %}
-            <li><a href="{{ n.get_absolute_url }}">{{ n.title }}</a>{% if n.important %} <strong class="text-danger">*</strong>{% endif %}</li>
-        {% empty %}<li>No news items.</li>{% endfor %}
+            <li class="mb-1"><a href="{{ n.get_absolute_url }}">{{ n.title }}</a>{% if n.important %} <span class="badge text-bg-danger">Important</span>{% endif %}</li>
+        {% empty %}<li class="text-muted small">No news items.</li>{% endfor %}
     </ul>
 </section>
 {% endblock %}

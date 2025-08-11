@@ -19,14 +19,14 @@
 				<span class="navbar-toggler-icon"></span>
 			</button>
 			<div class="collapse navbar-collapse" id="navbarNav">
-				<ul class="navbar-nav ms-auto">
-					<li class="nav-item"><a class="nav-link" href="{% url 'portfolio:index' %}">Home</a></li>
-					<li class="nav-item"><a class="nav-link" href="{% url 'portfolio:index' %}#portfolio">Portfolio</a></li>
+				<ul class="navbar-nav ms-auto align-items-lg-center">
+					<li class="nav-item"><a class="nav-link" href="{% url 'portfolio:index' %}">Portfolio</a></li>
 					<li class="nav-item"><a class="nav-link" href="{% url 'portfolio:project_list' %}">Projects</a></li>
 					<li class="nav-item"><a class="nav-link" href="{% url 'portfolio:experience' %}">Experience</a></li>
-					<li class="nav-item"><a class="nav-link" href="{% url 'portfolio:blog_list' %}">Blogs</a></li>
+					<li class="nav-item"><a class="nav-link" href="{% url 'portfolio:blog_list' %}">Blog</a></li>
 					<li class="nav-item"><a class="nav-link" href="{% url 'portfolio:news' %}">News</a></li>
-					<li class="nav-item"><a class="nav-link" href="{% url 'portfolio:contact' %}">Contact Us</a></li>
+					<li class="nav-item"><a class="nav-link" href="{% url 'portfolio:contact' %}">Contact</a></li>
+					<li class="nav-item ms-lg-3"><button id="themeToggle" class="btn btn-sm btn-outline-secondary" type="button">Toggle Theme</button></li>
 				</ul>
 			</div>
 		</div>
@@ -44,6 +44,7 @@
 
 	<!-- Bootstrap JS Bundle -->
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoHwNeF17wJXgoUstPomm5s51y5nPeiSmT2MlQni1N0Xbgc" crossorigin="anonymous"></script>
+	<script src="{% static 'js/site.js' %}"></script>
 	{% block extra_js %}{% endblock %}
 </body>
 </html>

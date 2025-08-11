@@ -36,12 +36,12 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from django.views.generic import RedirectView
+from app.portfolio import views as portfolio_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('portfolio/', include('app.portfolio.urls')),
-    path('', RedirectView.as_view(url='/portfolio/'), name='home'),  # Redirect root to portfolio
+    path('', portfolio_views.index, name='portfolio_landing'),  # Root now serves portfolio page directly
     # ... any other main project URLs
 ]
 

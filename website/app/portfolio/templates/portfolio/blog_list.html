@@ -1,11 +1,18 @@
 {% extends 'base.html' %}
+{% block title %}Blog{% endblock %}
 {% block content %}
-<h1>Blog</h1>
-<ul>
-  {% for post in posts %}
-    <li><a href="{{ post.get_absolute_url }}">{{ post.title }}</a>{% if post.status != 'published' %} <em>({{ post.status }})</em>{% endif %}</li>
-  {% empty %}
-    <li>No posts yet.</li>
-  {% endfor %}
-</ul>
+<section class="mb-5">
+  <h1 class="h3 mb-4">Blog</h1>
+  <div class="list-group">
+    {% for post in posts %}
+      <a href="{{ post.get_absolute_url }}" class="list-group-item list-group-item-action">
+        <h5 class="mb-1">{{ post.title }}</h5>
+        <p class="mb-1 small text-muted">{{ post.summary|default:post.content|truncatewords:30 }}</p>
+        {% if post.status != 'published' %}<span class="badge text-bg-secondary">{{ post.status }}</span>{% endif %}
+      </a>
+    {% empty %}
+      <div class="text-muted">No posts yet.</div>
+    {% endfor %}
+  </div>
+</section>
 {% endblock %}

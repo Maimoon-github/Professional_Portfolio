@@ -1,9 +1,14 @@
 {% extends 'base.html' %}
 {% block title %}News: {{ item.title }}{% endblock %}
 {% block content %}
-<h1>{{ item.title }}</h1>
-<p class="text-muted">{{ item.published_at }}</p>
-<p>{{ item.summary }}</p>
-<div>{{ item.content|linebreaks }}</div>
-{% if item.link %}<p><a href="{{ item.link }}" target="_blank">Related Link</a></p>{% endif %}
+<article class="news-item">
+	<header class="mb-3">
+		<h1 class="h3">{{ item.title }}</h1>
+		<p class="text-muted small mb-1">{{ item.published_at }}</p>
+	</header>
+	<p class="lead small">{{ item.summary }}</p>
+	<div class="mb-3">{{ item.content|linebreaks }}</div>
+	{% if item.link %}<p><a href="{{ item.link }}" target="_blank" class="btn btn-sm btn-outline-primary">Related Link</a></p>{% endif %}
+	<a href="{% url 'portfolio:news' %}" class="small">&larr; Back to News</a>
+</article>
 {% endblock %}

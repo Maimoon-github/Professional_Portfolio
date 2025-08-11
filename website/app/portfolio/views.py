@@ -6,7 +6,7 @@ from .models import Project, BlogPost, NewsItem, Experience as ExperienceModel, 
 # Create your views here.
 
 def index(request):
-    """Portfolio home page view with dynamic snippets."""
+    """Primary portfolio landing page with dynamic content sections."""
     projects = Project.objects.filter(status=Project.PUBLISHED, featured=True)[:3]
     posts = BlogPost.objects.filter(status=BlogPost.PUBLISHED)[:3]
     news_items = NewsItem.objects.filter(status=NewsItem.PUBLISHED).order_by('-published_at')[:5]
@@ -83,4 +83,7 @@ def dashboard(request):
         'project_count': Project.objects.count(),
         'blog_count': BlogPost.objects.count(),
         'news_count': NewsItem.objects.count(),
+        'recent_projects': Project.objects.order_by('-created_at')[:5] if hasattr(Project, 'created_at') else Project.objects.order_by('-id')[:5],
+        'recent_posts': BlogPost.objects.order_by('-published_at')[:5] if hasattr(BlogPost, 'published_at') else BlogPost.objects.order_by('-id')[:5],
+        'recent_news': NewsItem.objects.order_by('-published_at')[:5] if hasattr(NewsItem, 'published_at') else NewsItem.objects.order_by('-id')[:5],
     })
