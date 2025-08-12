@@ -1,0 +1,444 @@
+{% extends 'portfolio/dashboard/base.html' %}
+{% load static %}
+
+{% block title %}Media Library - Dashboard{% endblock %}
+
+{% block breadcrumb %}
+<span class="separator">/</span>
+<span>Media</span>
+{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+    <!-- Header Section -->
+    <div class="dashboard-card">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div>
+                <h1 class="text-2xl font-bold text-primary mb-2">Media Library</h1>
+                <p class="text-secondary">Manage your images, documents, and other media assets.</p>
+            </div>
+            <div class="flex items-center gap-3">
+                <button class="btn btn-primary" onclick="openUploadModal()">
+                    <i data-feather="upload"></i>
+                    Upload Files
+                </button>
+                <button class="btn btn-secondary" onclick="createFolder()">
+                    <i data-feather="folder-plus"></i>
+                    New Folder
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Upload Dropzone -->
+    <div class="dropzone" 
+         data-upload-url="/admin-dashboard/ajax/upload-media/"
+         data-multiple="true"
+         data-accept="image/*,.pdf,.doc,.docx,.txt">
+        <div class="dropzone-icon">
+            <i data-feather="upload-cloud"></i>
+        </div>
+        <div class="dropzone-text">
+            Drop files here or click to upload
+        </div>
+        <div class="dropzone-subtext">
+            Supports images, PDFs, and documents up to 10MB each
+        </div>
+    </div>
+
+    <!-- Search and Filter Bar -->
+    <div class="search-bar">
+        <form method="get" class="flex flex-wrap items-center gap-4 w-full">
+            <div class="flex-1 min-w-0">
+                <input type="text" 
+                       name="q" 
+                       value="{{ search_query }}"
+                       placeholder="Search media files..." 
+                       class="form-control search-input"
+                       data-search>
+            </div>
+            
+            <select name="type" class="form-control filter-select" data-filter="type">
+                <option value="all" {% if file_type_filter == 'all' %}selected{% endif %}>All Types</option>
+                {% for value, label in file_type_choices %}
+                <option value="{{ value }}" {% if file_type_filter == value %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+            
+            <select name="sort" class="form-control filter-select" data-filter="sort">
+                <option value="recent">Most Recent</option>
+                <option value="oldest">Oldest</option>
+                <option value="name">Name A-Z</option>
+                <option value="size">File Size</option>
+            </select>
+            
+            <button type="submit" class="btn btn-secondary">
+                <i data-feather="search"></i>
+                Search
+            </button>
+        </form>
+    </div>
+
+    <!-- Media Grid -->
+    {% if media_assets %}
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+        {% for asset in media_assets %}
+        <div class="dashboard-card media-item p-3" data-media-id="{{ asset.id }}">
+            <div class="relative group">
+                <!-- Media Preview -->
+                {% if asset.file_type == 'image' %}
+                <div class="aspect-square bg-accent rounded-lg overflow-hidden mb-3">
+                    <img src="{{ asset.file.url }}" 
+                         alt="{{ asset.alt_text|default:asset.title }}"
+                         class="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
+                         loading="lazy">
+                </div>
+                {% else %}
+                <div class="aspect-square bg-accent rounded-lg flex items-center justify-center mb-3">
+                    {% if '.pdf' in asset.file.name %}
+                    <i data-feather="file-text" class="w-8 h-8 text-danger"></i>
+                    {% elif '.doc' in asset.file.name or '.docx' in asset.file.name %}
+                    <i data-feather="file-text" class="w-8 h-8 text-info"></i>
+                    {% else %}
+                    <i data-feather="file" class="w-8 h-8 text-secondary"></i>
+                    {% endif %}
+                </div>
+                {% endif %}
+                
+                <!-- Overlay Actions -->
+                <div class="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-200 rounded-lg flex items-center justify-center gap-2">
+                    <button class="btn btn-secondary btn-sm btn-icon-only" 
+                            onclick="previewMedia({{ asset.id }})"
+                            data-tooltip="Preview">
+                        <i data-feather="eye" class="w-4 h-4"></i>
+                    </button>
+                    <button class="btn btn-secondary btn-sm btn-icon-only" 
+                            onclick="editMedia({{ asset.id }})"
+                            data-tooltip="Edit">
+                        <i data-feather="edit-2" class="w-4 h-4"></i>
+                    </button>
+                    <button class="btn btn-secondary btn-sm btn-icon-only" 
+                            onclick="copyUrl('{{ asset.file.url }}')"
+                            data-tooltip="Copy URL">
+                        <i data-feather="link" class="w-4 h-4"></i>
+                    </button>
+                    <button class="btn btn-danger btn-sm btn-icon-only" 
+                            onclick="deleteMedia({{ asset.id }})"
+                            data-tooltip="Delete">
+                        <i data-feather="trash-2" class="w-4 h-4"></i>
+                    </button>
+                </div>
+                
+                <!-- Selection Checkbox -->
+                <div class="absolute top-2 left-2">
+                    <input type="checkbox" 
+                           class="form-checkbox"
+                           value="{{ asset.id }}"
+                           onchange="updateSelection()">
+                </div>
+            </div>
+            
+            <!-- Media Info -->
+            <div class="space-y-1">
+                <h4 class="text-sm font-medium text-primary truncate" title="{{ asset.title|default:asset.file.name }}">
+                    {{ asset.title|default:asset.file.name|truncatechars:20 }}
+                </h4>
+                <div class="flex items-center justify-between text-xs text-muted">
+                    <span>{{ asset.file.size|filesizeformat }}</span>
+                    <span class="badge badge-primary text-xs">
+                        {% if asset.file_type == 'image' %}IMG{% else %}DOC{% endif %}
+                    </span>
+                </div>
+                <div class="text-xs text-muted">
+                    {{ asset.created_at|date:"M d, Y" }}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    {% if media_assets.has_other_pages %}
+    <div class="dashboard-card">
+        <div class="flex items-center justify-between">
+            <div class="text-sm text-secondary">
+                Showing {{ media_assets.start_index }}–{{ media_assets.end_index }} of {{ media_assets.paginator.count }} files
+            </div>
+            
+            <div class="flex items-center gap-2">
+                {% if media_assets.has_previous %}
+                <a href="?{% if search_query %}q={{ search_query }}&{% endif %}{% if file_type_filter != 'all' %}type={{ file_type_filter }}&{% endif %}page={{ media_assets.previous_page_number }}" 
+                   class="btn btn-secondary btn-sm">
+                    <i data-feather="chevron-left" class="w-4 h-4"></i>
+                    Previous
+                </a>
+                {% endif %}
+                
+                <span class="px-3 py-2 text-sm text-secondary">
+                    Page {{ media_assets.number }} of {{ media_assets.paginator.num_pages }}
+                </span>
+                
+                {% if media_assets.has_next %}
+                <a href="?{% if search_query %}q={{ search_query }}&{% endif %}{% if file_type_filter != 'all' %}type={{ file_type_filter }}&{% endif %}page={{ media_assets.next_page_number }}" 
+                   class="btn btn-secondary btn-sm">
+                    Next
+                    <i data-feather="chevron-right" class="w-4 h-4"></i>
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Bulk Actions (shown when items are selected) -->
+    <div id="bulk-actions" class="dashboard-card hidden">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <span id="selection-count" class="text-sm text-secondary">0 files selected</span>
+                <button class="btn btn-secondary btn-sm" onclick="clearSelection()">
+                    Clear Selection
+                </button>
+            </div>
+            
+            <div class="flex items-center gap-2">
+                <button class="btn btn-danger btn-sm" onclick="bulkDelete()">
+                    <i data-feather="trash-2" class="w-4 h-4"></i>
+                    Delete Selected
+                </button>
+                <button class="btn btn-secondary btn-sm" onclick="bulkDownload()">
+                    <i data-feather="download" class="w-4 h-4"></i>
+                    Download Selected
+                </button>
+            </div>
+        </div>
+    </div>
+    {% else %}
+        <!-- Empty State -->
+        <div class="dashboard-card text-center py-12">
+            <div class="w-16 h-16 bg-accent rounded-full flex items-center justify-center mx-auto mb-4">
+                <i data-feather="image" class="w-8 h-8 text-secondary"></i>
+            </div>
+            <h3 class="text-lg font-semibold text-primary mb-2">No Media Files Found</h3>
+            {% if search_query or file_type_filter != 'all' %}
+            <p class="text-secondary mb-4">
+                No files match your current filters. Try adjusting your search criteria.
+            </p>
+            <a href="{% url 'dashboard:media' %}" class="btn btn-secondary">
+                Clear Filters
+            </a>
+            {% else %}
+            <p class="text-secondary mb-4">
+                Start building your media library by uploading your first files.
+            </p>
+            <button class="btn btn-primary" onclick="openUploadModal()">
+                <i data-feather="upload"></i>
+                Upload First Files
+            </button>
+            {% endif %}
+        </div>
+    {% endif %}
+</div>
+
+<!-- Media Preview Modal -->
+<div class="modal-overlay" id="preview-modal">
+    <div class="modal max-w-4xl">
+        <div class="modal-header">
+            <h3 class="modal-title">Media Preview</h3>
+            <button class="modal-close" data-modal-close>
+                <i data-feather="x"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div id="preview-content" class="text-center">
+                <!-- Preview content will be loaded here -->
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" data-modal-close>Close</button>
+            <button class="btn btn-primary" id="download-btn">
+                <i data-feather="download"></i>
+                Download
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Media Edit Modal -->
+<div class="modal-overlay" id="edit-modal">
+    <div class="modal">
+        <div class="modal-header">
+            <h3 class="modal-title">Edit Media</h3>
+            <button class="modal-close" data-modal-close>
+                <i data-feather="x"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form id="edit-form" data-ajax-form>
+                {% csrf_token %}
+                <div class="space-y-4">
+                    <div class="form-group">
+                        <label class="form-label">Title</label>
+                        <input type="text" id="edit-title" class="form-control" placeholder="Enter title">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Alt Text</label>
+                        <input type="text" id="edit-alt-text" class="form-control" placeholder="Describe the image">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Description</label>
+                        <textarea id="edit-description" class="form-control form-textarea" placeholder="Enter description"></textarea>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" data-modal-close>Cancel</button>
+            <button class="btn btn-primary" onclick="saveMedia()">
+                Save Changes
+            </button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+let currentMediaId = null;
+let selectedItems = new Set();
+
+// Preview media
+function previewMedia(mediaId) {
+    // This would fetch media details and show preview
+    const modal = document.getElementById('preview-modal');
+    const content = document.getElementById('preview-content');
+    
+    // For now, just show a placeholder
+    content.innerHTML = '<div class="loading-spinner mx-auto"></div>';
+    Dashboard.openModal('preview-modal');
+    
+    // Simulate loading
+    setTimeout(() => {
+        content.innerHTML = '<p class="text-secondary">Media preview will be implemented here</p>';
+    }, 1000);
+}
+
+// Edit media
+function editMedia(mediaId) {
+    currentMediaId = mediaId;
+    Dashboard.openModal('edit-modal');
+    
+    // Load current media data (simulated)
+    document.getElementById('edit-title').value = 'Sample Title';
+    document.getElementById('edit-alt-text').value = 'Sample alt text';
+    document.getElementById('edit-description').value = 'Sample description';
+}
+
+// Save media changes
+function saveMedia() {
+    if (!currentMediaId) return;
+    
+    const title = document.getElementById('edit-title').value;
+    const altText = document.getElementById('edit-alt-text').value;
+    const description = document.getElementById('edit-description').value;
+    
+    // Simulate saving
+    Dashboard.showToast('Media updated successfully', 'success');
+    Dashboard.closeModal(document.getElementById('edit-modal'));
+}
+
+// Copy URL to clipboard
+function copyUrl(url) {
+    navigator.clipboard.writeText(url).then(() => {
+        Dashboard.showToast('URL copied to clipboard', 'success');
+    });
+}
+
+// Delete media
+function deleteMedia(mediaId) {
+    if (confirm('Are you sure you want to delete this file? This action cannot be undone.')) {
+        // Simulate deletion
+        Dashboard.showToast('File deleted successfully', 'success');
+        setTimeout(() => location.reload(), 1000);
+    }
+}
+
+// Update selection
+function updateSelection() {
+    const checkboxes = document.querySelectorAll('.media-item input[type="checkbox"]');
+    selectedItems.clear();
+    
+    checkboxes.forEach(checkbox => {
+        if (checkbox.checked) {
+            selectedItems.add(checkbox.value);
+        }
+    });
+    
+    const bulkActions = document.getElementById('bulk-actions');
+    const selectionCount = document.getElementById('selection-count');
+    
+    if (selectedItems.size > 0) {
+        bulkActions.classList.remove('hidden');
+        selectionCount.textContent = `${selectedItems.size} files selected`;
+    } else {
+        bulkActions.classList.add('hidden');
+    }
+}
+
+// Clear selection
+function clearSelection() {
+    const checkboxes = document.querySelectorAll('.media-item input[type="checkbox"]');
+    checkboxes.forEach(checkbox => checkbox.checked = false);
+    updateSelection();
+}
+
+// Bulk delete
+function bulkDelete() {
+    if (selectedItems.size === 0) return;
+    
+    if (confirm(`Are you sure you want to delete ${selectedItems.size} files? This action cannot be undone.`)) {
+        Dashboard.showToast(`${selectedItems.size} files deleted successfully`, 'success');
+        setTimeout(() => location.reload(), 1000);
+    }
+}
+
+// Bulk download
+function bulkDownload() {
+    if (selectedItems.size === 0) return;
+    
+    Dashboard.showToast(`Downloading ${selectedItems.size} files...`, 'info');
+    // Implement bulk download logic
+}
+
+// Create folder
+function createFolder() {
+    const folderName = prompt('Enter folder name:');
+    if (folderName) {
+        Dashboard.showToast(`Folder "${folderName}" created`, 'success');
+        // Implement folder creation logic
+    }
+}
+
+// Open upload modal
+function openUploadModal() {
+    // Trigger file input click
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.multiple = true;
+    fileInput.accept = 'image/*,.pdf,.doc,.docx,.txt';
+    
+    fileInput.addEventListener('change', function() {
+        if (this.files.length > 0) {
+            Dashboard.showToast(`Uploading ${this.files.length} files...`, 'info');
+            // Handle file upload
+        }
+    });
+    
+    fileInput.click();
+}
+
+// Initialize
+document.addEventListener('DOMContentLoaded', function() {
+    feather.replace();
+});
+</script>
+{% endblock %}

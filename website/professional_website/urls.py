@@ -32,17 +32,44 @@ Including another URLconf
 
 
 
+
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 from django.conf import settings
 from django.conf.urls.static import static
+from django.views.generic import RedirectView, TemplateView
 from app.portfolio import views as portfolio_views
 
+"""Consolidated project URLConf.
+
+Fixes prior duplication where a second urlpatterns list overwrote the first,
+removing the dashboard namespace and causing NoReverseMatch in templates.
+"""
+
 urlpatterns = [
+    # Admin
     path('admin/', admin.site.urls),
+
+    # Auth (login/logout/password reset views)
+    path('accounts/', include('django.contrib.auth.urls')),
+
+    # Public portfolio app (namespaced "portfolio")
     path('portfolio/', include('app.portfolio.urls')),
-    path('', portfolio_views.index, name='portfolio_landing'),  # Root now serves portfolio page directly
-    # ... any other main project URLs
+
+    # Dashboard (namespaced "dashboard") – mounted at /dashboard/
+    path('dashboard/', include('app.dashboard.urls', namespace='dashboard')),
+
+    # Backwards compatibility / convenience redirect (user tried /admin-dashboard)
+    path('admin-dashboard/', RedirectView.as_view(url='/dashboard/', permanent=False)),
+
+    # Root path serves portfolio landing
+    path('', portfolio_views.index, name='portfolio_landing'),
+
+    # Service worker (served as template so Django can deliver at root URL path)
+    path('sw.js', TemplateView.as_view(template_name='sw.js', content_type='application/javascript'), name='service_worker'),
+
+    # Favicon root request redirect -> existing image (avoid 404 in dev). Swap to real favicon later.
+    path('favicon.ico', RedirectView.as_view(url=settings.STATIC_URL + 'media/images/ff359f387545394ba70c7f8049001d6e.jpg', permanent=False)),
 ]
 
 if settings.DEBUG:

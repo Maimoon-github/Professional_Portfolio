@@ -13,6 +13,5 @@ urlpatterns = [
     path('experience/', views.experience, name='experience'),
     path('news/', views.news, name='news'),
     path('contact/', views.contact, name='contact'),
-    path('dashboard/', views.dashboard, name='dashboard'),
     path('api/', include('app.portfolio.api.urls')),
 ]

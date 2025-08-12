@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'app.portfolio.apps.PortfolioConfig',  # Custom app for portfolio (AppConfig)
+    'app.dashboard.apps.DashboardConfig',  # Separated dashboard logic
     'taggit',  # Tagging
     'simple_history',  # Content versioning
     'rest_framework',  # API framework
@@ -74,6 +75,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.debug',
             ],
         },
     },
@@ -138,6 +140,11 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Auth redirects
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'portfolio:index'
+LOGOUT_REDIRECT_URL = 'portfolio:index'
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [

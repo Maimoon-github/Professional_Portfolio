@@ -131,6 +131,14 @@
                 <li><a href="{% url 'portfolio:blog_list' %}" class="nav-link">Blog</a></li>
                 <li><a href="{% url 'portfolio:news' %}" class="nav-link">News</a></li>
                 <li><a href="{% url 'portfolio:contact' %}" class="nav-link">Contact</a></li>
+                {% if user.is_staff %}
+                <li><a href="{% url 'dashboard:home' %}" class="nav-link">Dashboard</a></li>
+                {% endif %}
+                {% if user.is_authenticated %}
+                <li><a href="{% url 'logout' %}" class="nav-link">Logout</a></li>
+                {% else %}
+                <li><a href="{% url 'login' %}" class="nav-link">Login</a></li>
+                {% endif %}
             </ul>
         </nav>
     </header>

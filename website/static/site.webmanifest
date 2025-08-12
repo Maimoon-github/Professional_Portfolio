@@ -1,0 +1,16 @@
+{
+  "name": "AI/ML Portfolio",
+  "short_name": "Portfolio",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#181a24",
+  "theme_color": "#60519b",
+  "icons": [
+    {
+      "src": "/static/media/images/ff359f387545394ba70c7f8049001d6e.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ]
+}

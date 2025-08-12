@@ -1,5 +1,4 @@
 from django.shortcuts import render, get_object_or_404
-from django.contrib.admin.views.decorators import staff_member_required
 from django.db.models import Q
 from .models import Project, BlogPost, NewsItem, Experience as ExperienceModel, Skill
 
@@ -76,14 +75,3 @@ def contact(request):
     return render(request, 'portfolio/contact.html')
 
 
-@staff_member_required
-def dashboard(request):
-    """Simple dashboard summarising counts."""
-    return render(request, 'portfolio/dashboard.html', {
-        'project_count': Project.objects.count(),
-        'blog_count': BlogPost.objects.count(),
-        'news_count': NewsItem.objects.count(),
-        'recent_projects': Project.objects.order_by('-created_at')[:5] if hasattr(Project, 'created_at') else Project.objects.order_by('-id')[:5],
-        'recent_posts': BlogPost.objects.order_by('-published_at')[:5] if hasattr(BlogPost, 'published_at') else BlogPost.objects.order_by('-id')[:5],
-        'recent_news': NewsItem.objects.order_by('-published_at')[:5] if hasattr(NewsItem, 'published_at') else NewsItem.objects.order_by('-id')[:5],
-    })
