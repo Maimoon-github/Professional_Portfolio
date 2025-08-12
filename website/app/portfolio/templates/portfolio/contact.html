@@ -1,29 +1,69 @@
 {% extends "base.html" %}
 
 {% block title %}Contact Us{% endblock %}
+{% block meta_description %}Get in touch to discuss data science projects, collaborations, or inquiries about machine learning and AI solutions.{% endblock %}
 
 {% block content %}
-<section class="my-5">
+<section class="contact-section my-5">
     <div class="container">
-        <h2 class="mb-4">Contact Us</h2>
-        <p>If you have any questions, please fill out the form below:</p>
-        <!-- Contact form can be integrated here -->
-        <form method="post">
-            {% csrf_token %}
-            <div class="mb-3">
-                <label for="name" class="form-label">Name</label>
-                <input type="text" class="form-control" id="name" name="name" required>
+        <h1 class="mb-4">Contact Us</h1>
+        <p>If you have any questions about my work or would like to discuss a potential collaboration, please fill out the form below:</p>
+        
+        <div class="row mt-4">
+            <div class="col-lg-8">
+                <!-- Contact form with accessibility improvements -->
+                <form method="post" aria-labelledby="contact-form-heading">
+                    <h2 id="contact-form-heading" class="h5 mb-3">Send a Message</h2>
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="name" name="name" required 
+                               aria-describedby="nameHelp">
+                        <div id="nameHelp" class="form-text visually-hidden">Enter your full name</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" required
+                               aria-describedby="emailHelp">
+                        <div id="emailHelp" class="form-text visually-hidden">Enter your email address</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="subject" class="form-label">Subject</label>
+                        <input type="text" class="form-control" id="subject" name="subject">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="message" class="form-label">Message</label>
+                        <textarea class="form-control" id="message" name="message" rows="4" required
+                                  aria-describedby="messageHelp"></textarea>
+                        <div id="messageHelp" class="form-text visually-hidden">Please describe your inquiry</div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">Send Message</button>
+                </form>
             </div>
-            <div class="mb-3">
-                <label for="email" class="form-label">Email</label>
-                <input type="email" class="form-control" id="email" name="email" required>
+            
+            <div class="col-lg-4 mt-4 mt-lg-0">
+                <aside class="contact-info p-3 border rounded">
+                    <h2 class="h5 mb-3">Connect With Me</h2>
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-2">
+                            <strong>Email:</strong> <a href="mailto:contact@example.com">contact@example.com</a>
+                        </li>
+                        <li class="mb-2">
+                            <strong>GitHub:</strong> <a href="https://github.com/yourusername" target="_blank" rel="noopener noreferrer">github.com/yourusername</a>
+                        </li>
+                        <li>
+                            <strong>LinkedIn:</strong> <a href="https://linkedin.com/in/yourprofile" target="_blank" rel="noopener noreferrer">linkedin.com/in/yourprofile</a>
+                        </li>
+                    </ul>
+                </aside>
             </div>
-            <div class="mb-3">
-                <label for="message" class="form-label">Message</label>
-                <textarea class="form-control" id="message" name="message" rows="4" required></textarea>
-            </div>
-            <button type="submit" class="btn btn-primary">Send Message</button>
-        </form>
+        </div>
     </div>
 </section>
 {% endblock %}
+ 

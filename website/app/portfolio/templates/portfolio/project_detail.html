@@ -1,20 +1,110 @@
 {% extends 'base.html' %}
+
 {% block title %}Project: {{ project.title }}{% endblock %}
+{% block meta_description %}{{ project.summary|default:project.description|truncatewords:30 }}{% endblock %}
+
+{% block og_title %}{{ project.title }} | Data Science Project{% endblock %}
+{% block og_description %}{{ project.summary|default:project.description|truncatewords:30 }}{% endblock %}
+{% block og_image %}{{ project.hero_image.url }}{% endblock %}
+
 {% block content %}
 <article class="project-detail">
 	<header class="mb-4">
 		<h1 class="h2">{{ project.title }}</h1>
+		{% if project.summary %}
+			<p class="lead">{{ project.summary }}</p>
+		{% endif %}
+		<div class="meta text-muted mb-3">
+			{% if project.date_completed %}
+				<span class="me-3">Completed: {{ project.date_completed }}</span>
+			{% endif %}
+			{% if project.technologies %}
+				<div class="mt-2">
+					<strong>Technologies:</strong>
+					{% for tech in project.technologies.all %}
+						<span class="badge bg-light text-dark me-1">{{ tech.name }}</span>
+					{% endfor %}
+				</div>
+			{% endif %}
+		</div>
 	</header>
+
 	{% if project.hero_image %}
 		<figure class="mb-4">
-			<img src="{{ project.hero_image.url }}" class="img-fluid rounded" alt="{{ project.title }} hero image" />
+			<img src="{{ project.hero_image.url }}" class="img-fluid rounded" alt="{{ project.title }} project showcase image" />
+			{% if project.image_caption %}
+				<figcaption class="small text-muted mt-1">{{ project.image_caption }}</figcaption>
+			{% endif %}
 		</figure>
 	{% endif %}
-	<div class="mb-4">{{ project.description|linebreaks }}</div>
-	<div class="d-flex flex-wrap gap-2 mb-4">
-		{% if project.repository_url %}<a href="{{ project.repository_url }}" target="_blank" class="btn btn-sm btn-outline-primary">Repository</a>{% endif %}
-		{% if project.live_url %}<a href="{{ project.live_url }}" target="_blank" class="btn btn-sm btn-primary">Live Demo</a>{% endif %}
-	</div>
-	<a href="{% url 'portfolio:project_list' %}" class="small">&larr; Back to Projects</a>
+	
+	<section class="project-content mb-4">
+		<h2 class="h4 mb-3">Project Overview</h2>
+		<div class="content">{{ project.description|linebreaks }}</div>
+	</section>
+
+	{% if project.repository_url or project.live_url %}
+		<section class="project-links mb-4">
+			<h2 class="h4 visually-hidden">Project Links</h2>
+			<div class="d-flex flex-wrap gap-2 mb-4">
+				{% if project.repository_url %}
+					<a href="{{ project.repository_url }}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-primary">
+						Repository <span class="visually-hidden">for {{ project.title }}</span>
+					</a>
+				{% endif %}
+				{% if project.live_url %}
+					<a href="{{ project.live_url }}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-primary">
+						Live Demo <span class="visually-hidden">of {{ project.title }}</span>
+					</a>
+				{% endif %}
+			</div>
+		</section>
+	{% endif %}
+
+	{% if project.additional_images.all %}
+		<section class="project-gallery mb-4">
+			<h2 class="h4 mb-3">Project Gallery</h2>
+			<div class="row g-3">
+				{% for image in project.additional_images.all %}
+					<div class="col-md-4">
+						<figure class="mb-0">
+							<img src="{{ image.image.url }}" class="img-fluid rounded" alt="{{ image.caption|default:project.title }} - image {{ forloop.counter }}" />
+							{% if image.caption %}
+								<figcaption class="small text-muted mt-1">{{ image.caption }}</figcaption>
+							{% endif %}
+						</figure>
+					</div>
+				{% endfor %}
+			</div>
+		</section>
+	{% endif %}
+
+	<nav class="project-navigation" aria-label="Project navigation">
+		<a href="{% url 'portfolio:project_list' %}" class="btn btn-outline-secondary">
+			<span aria-hidden="true">&larr;</span> Back to Projects
+		</a>
+	</nav>
 </article>
+
+{% if related_projects %}
+	<aside class="related-projects mt-5">
+		<h2 class="h4 mb-3">Related Projects</h2>
+		<div class="row row-cols-1 row-cols-md-3 g-4">
+			{% for related in related_projects %}
+				<div class="col">
+					<div class="card h-100">
+						{% if related.hero_image %}
+							<img src="{{ related.hero_image.url }}" class="card-img-top" style="max-height:120px;object-fit:cover;" alt="{{ related.title }} thumbnail" />
+						{% endif %}
+						<div class="card-body">
+							<h3 class="h5 card-title"><a href="{{ related.get_absolute_url }}">{{ related.title }}</a></h3>
+							<p class="card-text small">{{ related.summary|default:related.description|truncatewords:15 }}</p>
+						</div>
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+	</aside>
+{% endif %}
 {% endblock %}
+ 
