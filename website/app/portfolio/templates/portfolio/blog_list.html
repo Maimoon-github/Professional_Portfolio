@@ -1,14 +1,82 @@
 {% extends 'base.html' %}
 {% block title %}Blog{% endblock %}
+
+{% block extra_head %}
+<style>
+    .blog-card {
+        background: #31323c;
+        border-left: 3px solid transparent;
+        transition: all 0.3s;
+        margin-bottom: 1rem;
+        border-radius: var(--radius-sm);
+    }
+    
+    .blog-card:hover {
+        border-left-color: #60519b;
+        transform: translateX(5px);
+    }
+    
+    .blog-card .blog-title {
+        color: #bfc0d1;
+        transition: color 0.2s;
+    }
+    
+    .blog-card:hover .blog-title {
+        color: #60519b;
+    }
+    
+    .category-tag {
+        display: inline-block;
+        padding: 0.15rem 0.5rem;
+        font-size: 0.7rem;
+        background: rgba(96, 81, 155, 0.2);
+        color: #bfc0d1;
+        border-radius: 12px;
+        margin-right: 0.25rem;
+    }
+    
+    .read-time {
+        color: #60519b;
+        font-size: 0.8rem;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <section class="mb-5">
   <h1 class="h3 mb-4">Blog</h1>
-  <div class="list-group">
+  
+  <div class="categories mb-4">
+    <div class="d-flex flex-wrap">
+      <span class="category-tag me-2 mb-2 active">All</span>
+      <span class="category-tag me-2 mb-2">Machine Learning</span>
+      <span class="category-tag me-2 mb-2">Data Science</span>
+      <span class="category-tag me-2 mb-2">AI Ethics</span>
+      <span class="category-tag me-2 mb-2">Tutorials</span>
+    </div>
+  </div>
+  
+  <div class="blog-list">
     {% for post in posts %}
-      <a href="{{ post.get_absolute_url }}" class="list-group-item list-group-item-action">
-        <h5 class="mb-1">{{ post.title }}</h5>
-        <p class="mb-1 small text-muted">{{ post.summary|default:post.content|truncatewords:30 }}</p>
-        {% if post.status != 'published' %}<span class="badge text-bg-secondary">{{ post.status }}</span>{% endif %}
+      <a href="{{ post.get_absolute_url }}" class="text-decoration-none">
+        <div class="blog-card p-3">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <h2 class="blog-title h5 mb-1">{{ post.title }}</h2>
+              <div class="mb-2">
+                <span class="text-muted small">{{ post.published_at|date:"M d, Y" }}</span>
+                <span class="mx-2">•</span>
+                <span class="read-time">5 min read</span>
+              </div>
+            </div>
+            {% if post.status != 'published' %}<span class="badge text-bg-secondary">{{ post.status }}</span>{% endif %}
+          </div>
+          <p class="text-muted small mb-2">{{ post.summary|default:post.content|truncatewords:30 }}</p>
+          <div class="mt-2">
+            <span class="category-tag">Data Science</span>
+            <span class="category-tag">Python</span>
+          </div>
+        </div>
       </a>
     {% empty %}
       <div class="text-muted">No posts yet.</div>

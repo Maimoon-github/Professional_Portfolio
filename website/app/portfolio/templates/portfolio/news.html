@@ -2,23 +2,118 @@
 
 {% block title %}News{% endblock %}
 
+{% block extra_head %}
+<style>
+    .news-timeline {
+        position: relative;
+        padding: 1rem 0 1rem 1.5rem;
+    }
+    
+    .news-timeline::before {
+        content: '';
+        position: absolute;
+        height: 100%;
+        width: 2px;
+        background: linear-gradient(to bottom, #60519b, rgba(96, 81, 155, 0.3));
+        left: 0;
+        top: 0;
+    }
+    
+    .news-item {
+        position: relative;
+        padding-left: 1.5rem;
+        margin-bottom: 1.5rem;
+        transition: transform 0.3s;
+    }
+    
+    .news-item::before {
+        content: '';
+        position: absolute;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: #31323c;
+        border: 2px solid #60519b;
+        left: -6px;
+        top: 0.5rem;
+    }
+    
+    .news-item:hover {
+        transform: translateX(5px);
+    }
+    
+    .news-date {
+        font-size: 0.8rem;
+        color: #60519b;
+        margin-bottom: 0.25rem;
+    }
+    
+    .search-form {
+        background-color: #31323c;
+        padding: 1rem;
+        border-radius: var(--radius-sm);
+        margin-bottom: 2rem;
+    }
+    
+    .search-input {
+        background-color: rgba(191, 192, 209, 0.1);
+        border: 1px solid rgba(96, 81, 155, 0.3);
+        color: #bfc0d1;
+    }
+    
+    .search-input:focus {
+        background-color: rgba(191, 192, 209, 0.15);
+        border-color: #60519b;
+        box-shadow: 0 0 0 0.25rem rgba(96, 81, 155, 0.25);
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <section class="my-5">
     <div class="container">
-        <h2 class="mb-4">Latest News</h2>
-        <form method="get" class="mb-3 d-flex" role="search">
-            <input type="text" name="q" value="{{ search_query }}" class="form-control me-2" placeholder="Search news..." />
-            <button class="btn btn-outline-primary" type="submit">Search</button>
-        </form>
-        <ul class="list-group">
+        <h2 class="mb-4">Latest News & Updates</h2>
+        
+        <div class="search-form">
+            <form method="get" class="d-flex" role="search">
+                <input type="text" name="q" value="{{ search_query }}" class="form-control search-input me-2" placeholder="Search news..." />
+                <button class="btn btn-primary" type="submit">Search</button>
+            </form>
+        </div>
+        
+        <div class="news-timeline">
             {% for n in news_list %}
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-                <a href="{{ n.get_absolute_url }}">{{ n.title }}</a>
-                {% if n.important %}<span class="badge text-bg-danger">Important</span>{% endif %}
-            </li>
-            {% empty %}<li class="list-group-item">No news items.</li>{% endfor %}
-        </ul>
+            <div class="news-item">
+                <div class="news-date">{{ n.published_at|date:"M d, Y" }}</div>
+                <h3 class="h5 mb-1">
+                    <a href="{{ n.get_absolute_url }}">{{ n.title }}</a>
+                    {% if n.important %}<span class="badge text-bg-danger ms-2">Important</span>{% endif %}
+                </h3>
+                <p class="text-muted small mb-0">{{ n.summary|truncatewords:15 }}</p>
+            </div>
+            {% empty %}
+            <div class="text-center py-4">
+                <p class="mb-0">No news items available.</p>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div class="newsletter-signup mt-5">
+            <div class="card bg-gradient-card">
+                <div class="card-body text-center p-4">
+                    <h3 class="h5 mb-3">Stay Updated</h3>
+                    <p class="mb-3 small">Subscribe to receive notifications about new projects and updates.</p>
+                    <div class="row justify-content-center">
+                        <div class="col-md-8">
+                            <form class="d-flex">
+                                <input type="email" class="form-control me-2" placeholder="Your email address">
+                                <button class="btn btn-primary" type="submit">Subscribe</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
 {% endblock %}
-  

@@ -5,6 +5,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<title>{% block title %}Portfolio{% endblock %} | Data Science & AI Professional</title>
 	<meta name="description" content="{% block meta_description %}Professional portfolio showcasing data science, machine learning, and AI projects with expertise in agentic AI, deep learning, and data analytics.{% endblock %}">
+	<meta name="theme-color" content="#60519b">
 	<!-- Open Graph / Social Media Meta Tags -->
 	<meta property="og:title" content="{% block og_title %}Data Science & AI Portfolio{% endblock %}">
 	<meta property="og:description" content="{% block og_description %}Professional portfolio showcasing expertise in data science, machine learning, and AI projects.{% endblock %}">
@@ -47,7 +48,7 @@
 	<a href="#main-content" class="visually-hidden visually-hidden-focusable">Skip to main content</a>
 	
 	<header role="banner">
-		<nav class="navbar navbar-expand-lg navbar-light bg-light" aria-label="Main navigation">
+		<nav class="navbar navbar-expand-lg navbar-dark" aria-label="Main navigation">
 			<div class="container-fluid">
 				<a class="navbar-brand" href="{% url 'portfolio:index' %}">Data Scientist Portfolio</a>
 				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -62,7 +63,7 @@
 						<li class="nav-item"><a class="nav-link" href="{% url 'portfolio:news' %}">News</a></li>
 						<li class="nav-item"><a class="nav-link" href="{% url 'portfolio:contact' %}">Contact</a></li>
 						<li class="nav-item ms-lg-3">
-							<button id="themeToggle" class="btn btn-sm btn-outline-secondary" type="button" aria-label="Toggle dark/light theme">Toggle Theme</button>
+							<button id="themeToggle" class="btn btn-sm btn-outline-secondary" type="button" aria-label="Toggle dark/light theme">Switch to Light Theme</button>
 						</li>
 					</ul>
 				</div>
@@ -74,7 +75,7 @@
 		{% block content %}{% endblock %}
 	</main>
 
-	<footer class="bg-light py-4" role="contentinfo">
+	<footer class="py-4" role="contentinfo">
 		<div class="container">
 			<div class="row">
 				<div class="col-md-6 text-center text-md-start">
@@ -96,4 +97,3 @@
 	{% block extra_js %}{% endblock %}
 </body>
 </html>
- 
