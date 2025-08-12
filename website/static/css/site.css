@@ -1615,3 +1615,60 @@ a:hover {
     page-break-inside: avoid;
   }
 }
+
+/* Login/Logout Button Styles */
+.nav-auth {
+    background: var(--gradient-purple) !important;
+    color: var(--pure-white) !important;
+    border-radius: 0.5rem;
+    padding: var(--space-xs) var(--space-sm) !important;
+    margin-left: var(--space-sm);
+    border: 1px solid var(--purple-60);
+    box-shadow: var(--shadow-md);
+    transition: all 0.3s ease !important;
+}
+
+.nav-auth:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.nav-auth:active {
+    transform: translateY(0);
+}
+
+.nav-auth i {
+    margin-right: 0.25rem;
+}
+
+/* Dashboard Link Styles */
+.nav-dashboard {
+    color: var(--accent-purple) !important;
+    font-weight: var(--font-weight-medium);
+}
+
+.nav-dashboard i {
+    margin-right: 0.25rem;
+}
+
+.nav-dashboard.active {
+    color: var(--purple-90) !important;
+}
+
+/* Active Link Indicator */
+.nav-link.active {
+    position: relative;
+    color: var(--accent-purple) !important;
+    font-weight: var(--font-weight-medium);
+}
+
+.nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: var(--gradient-purple);
+    border-radius: 2px;
+}

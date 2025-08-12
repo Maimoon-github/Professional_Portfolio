@@ -125,19 +125,23 @@
             </button>
             
             <ul class="nav-menu">
-                <li><a href="{% url 'portfolio:index' %}" class="nav-link">Home</a></li>
-                <li><a href="{% url 'portfolio:project_list' %}" class="nav-link">Projects</a></li>
-                <li><a href="{% url 'portfolio:experience' %}" class="nav-link">Experience</a></li>
-                <li><a href="{% url 'portfolio:blog_list' %}" class="nav-link">Blog</a></li>
-                <li><a href="{% url 'portfolio:news' %}" class="nav-link">News</a></li>
-                <li><a href="{% url 'portfolio:contact' %}" class="nav-link">Contact</a></li>
-                {% if user.is_staff %}
-                <li><a href="{% url 'dashboard:home' %}" class="nav-link">Dashboard</a></li>
-                {% endif %}
+                <li><a href="{% url 'portfolio:index' %}" class="nav-link {% if request.resolver_match.url_name == 'index' %}active{% endif %}">Home</a></li>
+                <li><a href="{% url 'portfolio:project_list' %}" class="nav-link {% if request.resolver_match.url_name == 'project_list' %}active{% endif %}">Projects</a></li>
+                <li><a href="{% url 'portfolio:experience' %}" class="nav-link {% if request.resolver_match.url_name == 'experience' %}active{% endif %}">Experience</a></li>
+                <li><a href="{% url 'portfolio:blog_list' %}" class="nav-link {% if request.resolver_match.url_name == 'blog_list' %}active{% endif %}">Blog</a></li>
+                <li><a href="{% url 'portfolio:news' %}" class="nav-link {% if request.resolver_match.url_name == 'news' %}active{% endif %}">News</a></li>
+                <li><a href="{% url 'portfolio:contact' %}" class="nav-link {% if request.resolver_match.url_name == 'contact' %}active{% endif %}">Contact</a></li>
                 {% if user.is_authenticated %}
-                <li><a href="{% url 'logout' %}" class="nav-link">Logout</a></li>
+                <li><a href="{% url 'dashboard:home' %}" class="nav-link nav-dashboard {% if request.resolver_match.namespace == 'dashboard' %}active{% endif %}">
+                    <i class="fas fa-chart-line"></i> Dashboard
+                </a></li>
+                <li><a href="{% url 'logout' %}" class="nav-link nav-auth">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a></li>
                 {% else %}
-                <li><a href="{% url 'login' %}" class="nav-link">Login</a></li>
+                <li><a href="{% url 'login' %}" class="nav-link nav-auth">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </a></li>
                 {% endif %}
             </ul>
         </nav>
