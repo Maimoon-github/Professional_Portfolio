@@ -2,70 +2,111 @@
 <html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="{% block meta_description %}AI/ML Data Scientist Portfolio - Expert in Deep Learning, Neural Networks, and Agentic AI Systems{% endblock %}">
-    <meta name="keywords" content="{% block meta_keywords %}AI, Machine Learning, Data Science, Deep Learning, Python, TensorFlow, PyTorch, Neural Networks, Computer Vision, NLP{% endblock %}">
-    <meta name="author" content="{% block meta_author %}Your Name{% endblock %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="{% block meta_description %}Enterprise-Level AI/ML Data Scientist Portfolio - Expert in Deep Learning, Neural Networks, Computer Vision, and Agentic AI Systems. Professional solutions for Fortune 500 companies.{% endblock %}">
+    <meta name="keywords" content="{% block meta_keywords %}AI, Machine Learning, Data Science, Deep Learning, Python, TensorFlow, PyTorch, Neural Networks, Computer Vision, NLP, Agentic AI, Enterprise Solutions, Fortune 500, Professional Portfolio{% endblock %}">
+    <meta name="author" content="{% block meta_author %}AI/ML Data Scientist{% endblock %}">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#60519b">
+    <meta name="color-scheme" content="dark">
+    
+    <!-- Premium PWA Meta Tags -->
+    <meta name="application-name" content="AI/ML Portfolio">
+    <meta name="apple-mobile-web-app-title" content="AI/ML Portfolio">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="msapplication-TileColor" content="#60519b">
+    <meta name="msapplication-config" content="{% load static %}{% static 'browserconfig.xml' %}">
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="{% block og_url %}{{ request.build_absolute_uri }}{% endblock %}">
-    <meta property="og:title" content="{% block og_title %}AI/ML Portfolio{% endblock %}">
-    <meta property="og:description" content="{% block og_description %}AI/ML Data Scientist Portfolio - Expert in Deep Learning, Neural Networks, and Agentic AI Systems{% endblock %}">
+    <meta property="og:title" content="{% block og_title %}AI/ML Portfolio - Enterprise Data Science Solutions{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Enterprise-Level AI/ML Data Scientist Portfolio - Expert in Deep Learning, Neural Networks, and Agentic AI Systems{% endblock %}">
     <meta property="og:image" content="{% block og_image %}{% load static %}{% static 'media/images/og-image.jpg' %}{% endblock %}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
     
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="{% block twitter_url %}{{ request.build_absolute_uri }}{% endblock %}">
-    <meta property="twitter:title" content="{% block twitter_title %}AI/ML Portfolio{% endblock %}">
-    <meta property="twitter:description" content="{% block twitter_description %}AI/ML Data Scientist Portfolio - Expert in Deep Learning, Neural Networks, and Agentic AI Systems{% endblock %}">
+    <meta property="twitter:title" content="{% block twitter_title %}AI/ML Portfolio - Enterprise Data Science Solutions{% endblock %}">
+    <meta property="twitter:description" content="{% block twitter_description %}Enterprise-Level AI/ML Data Scientist Portfolio - Expert in Deep Learning, Neural Networks, and Agentic AI Systems{% endblock %}">
     <meta property="twitter:image" content="{% block twitter_image %}{% load static %}{% static 'media/images/twitter-image.jpg' %}{% endblock %}">
     
-    <title>{% block title %}AI/ML Portfolio | Data Scientist{% endblock %}</title>
+    <title>{% block title %}AI/ML Portfolio - Enterprise Data Science Solutions | Professional AI/ML Consultant{% endblock %}</title>
     
-    <!-- Favicon -->
+    <!-- Premium Favicon Package -->
     <link rel="icon" type="image/x-icon" href="{% load static %}{% static 'media/images/favicon.ico' %}">
     <link rel="apple-touch-icon" sizes="180x180" href="{% load static %}{% static 'media/images/apple-touch-icon.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% load static %}{% static 'media/images/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% load static %}{% static 'media/images/favicon-16x16.png' %}">
+    <link rel="manifest" href="{% load static %}{% static 'site.webmanifest' %}">
+    <link rel="mask-icon" href="{% load static %}{% static 'media/images/safari-pinned-tab.svg' %}" color="#60519b">
     
-    <!-- Fonts -->
+    <!-- Premium Font Loading with Performance Optimization -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;300;400;500;600;700;900&display=swap" rel="stylesheet">
     
-    <!-- Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Premium Icon Library -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer">
     
-    <!-- CSS -->
+    <!-- Premium CSS with Performance Optimization -->
     {% load static %}
-    <link rel="stylesheet" href="{% static 'css/site.css' %}">
+    <link rel="preload" href="{% static 'css/site.css' %}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="{% static 'css/site.css' %}"></noscript>
+    
+    <!-- Admin Theme CSS (for Django Admin) -->
+    <link rel="stylesheet" href="{% static 'admin/css/admin_theme.css' %}">
     
     <!-- Additional CSS -->
     {% block extra_css %}{% endblock %}
     
-    <!-- JSON-LD Structured Data -->
+    <!-- Premium JSON-LD Structured Data -->
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
         "@type": "Person",
-        "name": "Your Name",
-        "jobTitle": "AI/ML Data Scientist",
+        "name": "AI/ML Data Scientist",
+        "jobTitle": "Senior AI/ML Data Scientist & Technical Lead",
+        "description": "Enterprise-level AI/ML specialist with expertise in Deep Learning, Neural Networks, Computer Vision, and Agentic AI Systems",
         "url": "{{ request.build_absolute_uri }}",
+        "image": "{% static 'media/images/profile.jpg' %}",
         "sameAs": [
             "https://linkedin.com/in/yourprofile",
             "https://github.com/yourusername",
-            "https://twitter.com/yourusername"
+            "https://twitter.com/yourusername",
+            "https://medium.com/@yourusername"
         ],
         "knowsAbout": [
             "Artificial Intelligence",
             "Machine Learning",
             "Deep Learning",
-            "Neural Networks",
+            "Neural Networks", 
             "Computer Vision",
             "Natural Language Processing",
+            "Agentic AI Systems",
             "Data Science",
             "Python Programming",
             "TensorFlow",
-            "PyTorch"
+            "PyTorch",
+            "Enterprise Solutions",
+            "Fortune 500 Consulting"
+        ],
+        "worksFor": {
+            "@type": "Organization",
+            "name": "Independent AI/ML Consultant"
+        },
+        "alumniOf": {
+            "@type": "EducationalOrganization",
+            "name": "Your University"
+        },
+        "awards": [
+            "AI Innovation Award 2024",
+            "Best ML Implementation 2023",
+            "Data Science Excellence 2022"
         ]
     }
     </script>
