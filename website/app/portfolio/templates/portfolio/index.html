@@ -1,0 +1,357 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Home{% endblock %}
+{% block meta_description %}AI/ML Data Scientist specializing in Deep Learning, Neural Networks, Computer Vision, and Agentic AI Systems. Explore my portfolio of innovative projects and technical expertise.{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero" id="home">
+    <div class="container">
+        <div class="hero-content animate-fadeInUp">
+            <h1 class="hero-title">
+                AI/ML <span class="text-purple">Data Scientist</span>
+            </h1>
+            <p class="hero-subtitle">
+                Transforming Complex Data into <span class="text-purple">Intelligent Solutions</span>
+            </p>
+            <p class="hero-description">
+                Specializing in Deep Learning, Neural Networks, Computer Vision, and Agentic AI Systems. 
+                I bridge the gap between cutting-edge AI research and practical business applications through 
+                elegant design and user-centered thinking.
+            </p>
+            <div class="flex gap-md justify-center">
+                <a href="{% url 'portfolio:project_list' %}" class="btn btn-primary btn-lg">
+                    <i class="fas fa-rocket"></i>
+                    Explore Projects
+                </a>
+                <a href="{% url 'portfolio:contact' %}" class="btn btn-secondary btn-lg">
+                    <i class="fas fa-envelope"></i>
+                    Get In Touch
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Skills Overview Section -->
+<section class="section bg-secondary" id="skills-overview">
+    <div class="container">
+        <div class="text-center mb-xl">
+            <h2 class="animate-fadeInDown">Core <span class="text-purple">Competencies</span></h2>
+            <p class="text-lg opacity-90">
+                Expert-level proficiency across the AI/ML technology stack
+            </p>
+        </div>
+        
+        <div class="grid grid-4 animate-fadeInUp">
+            <div class="card text-center">
+                <div class="mb-md">
+                    <i class="fas fa-brain fa-3x text-purple"></i>
+                </div>
+                <h3>Artificial Intelligence</h3>
+                <p>Neural networks, NLP, Computer Vision, and cutting-edge AI architectures</p>
+                <div class="skill-tags">
+                    <span class="tag">TensorFlow</span>
+                    <span class="tag">PyTorch</span>
+                    <span class="tag">Transformers</span>
+                </div>
+            </div>
+            
+            <div class="card text-center">
+                <div class="mb-md">
+                    <i class="fas fa-robot fa-3x text-purple"></i>
+                </div>
+                <h3>Agentic AI Systems</h3>
+                <p>Multi-agent frameworks, autonomous decision-making, and intelligent automation</p>
+                <div class="skill-tags">
+                    <span class="tag">LangChain</span>
+                    <span class="tag">AutoGen</span>
+                    <span class="tag">CrewAI</span>
+                </div>
+            </div>
+            
+            <div class="card text-center">
+                <div class="mb-md">
+                    <i class="fas fa-code fa-3x text-purple"></i>
+                </div>
+                <h3>Full-Stack Development</h3>
+                <p>End-to-end web applications with modern frameworks and cloud deployment</p>
+                <div class="skill-tags">
+                    <span class="tag">React</span>
+                    <span class="tag">Django</span>
+                    <span class="tag">AWS</span>
+                </div>
+            </div>
+            
+            <div class="card text-center">
+                <div class="mb-md">
+                    <i class="fas fa-chart-line fa-3x text-purple"></i>
+                </div>
+                <h3>Data Science</h3>
+                <p>Statistical modeling, data visualization, and advanced analytics</p>
+                <div class="skill-tags">
+                    <span class="tag">Pandas</span>
+                    <span class="tag">Plotly</span>
+                    <span class="tag">Tableau</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Projects Section -->
+{% if featured_projects %}
+<section class="section" id="featured-projects">
+    <div class="container">
+        <div class="text-center mb-xl">
+            <h2 class="animate-fadeInDown">Featured <span class="text-purple">Projects</span></h2>
+            <p class="text-lg opacity-90">
+                Showcasing innovative AI/ML solutions and technical excellence
+            </p>
+        </div>
+        
+        <div class="grid grid-3">
+            {% for project in featured_projects %}
+            <div class="project-card animate-fadeInUp" data-category="{{ project.category.slug|default:'all' }}">
+                {% if project.hero_image %}
+                <img src="{{ project.hero_image.url }}" alt="{{ project.title }}" class="project-image">
+                {% else %}
+                <div class="project-image" style="background: linear-gradient(135deg, var(--accent-purple), var(--secondary-dark)); display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-project-diagram fa-3x text-white opacity-50"></i>
+                </div>
+                {% endif %}
+                
+                <div class="project-content">
+                    <div class="project-header">
+                        <h3 class="project-title">
+                            <a href="{{ project.get_absolute_url }}" class="text-white">{{ project.title }}</a>
+                        </h3>
+                        {% if project.category %}
+                        <span class="project-category">{{ project.category.name }}</span>
+                        {% endif %}
+                    </div>
+                    
+                    <p class="project-description">{{ project.summary|truncatewords:20 }}</p>
+                    
+                    {% if project.tags.all %}
+                    <div class="project-tags">
+                        {% for tag in project.tags.all|slice:":4" %}
+                        <span class="tag">{{ tag.name }}</span>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    
+                    <div class="project-links">
+                        <a href="{{ project.get_absolute_url }}" class="btn btn-ghost btn-sm">
+                            <i class="fas fa-eye"></i>
+                            View Details
+                        </a>
+                        {% if project.repository_url %}
+                        <a href="{{ project.repository_url }}" target="_blank" class="btn btn-ghost btn-sm">
+                            <i class="fab fa-github"></i>
+                            Code
+                        </a>
+                        {% endif %}
+                        {% if project.live_url %}
+                        <a href="{{ project.live_url }}" target="_blank" class="btn btn-ghost btn-sm">
+                            <i class="fas fa-external-link-alt"></i>
+                            Live Demo
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div class="text-center mt-xl">
+            <a href="{% url 'portfolio:project_list' %}" class="btn btn-primary btn-lg">
+                <i class="fas fa-folder-open"></i>
+                View All Projects
+            </a>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Recent Blog Posts Section -->
+{% if recent_posts %}
+<section class="section bg-secondary" id="recent-posts">
+    <div class="container">
+        <div class="text-center mb-xl">
+            <h2 class="animate-fadeInDown">Latest <span class="text-purple">Insights</span></h2>
+            <p class="text-lg opacity-90">
+                Sharing knowledge and perspectives on AI/ML trends and innovations
+            </p>
+        </div>
+        
+        <div class="grid grid-3">
+            {% for post in recent_posts %}
+            <article class="blog-card animate-fadeInUp">
+                {% if post.cover_image %}
+                <img src="{{ post.cover_image.url }}" alt="{{ post.title }}" class="blog-image">
+                {% endif %}
+                
+                <div class="card-content p-lg">
+                    <div class="blog-meta">
+                        <span class="blog-date">
+                            <i class="fas fa-calendar"></i>
+                            {{ post.published_at|date:"M d, Y" }}
+                        </span>
+                        {% if post.category %}
+                        <span class="blog-category">{{ post.category.name }}</span>
+                        {% endif %}
+                        <span class="read-time">
+                            <i class="fas fa-clock"></i>
+                            5 min read
+                        </span>
+                    </div>
+                    
+                    <h3 class="card-title">
+                        <a href="{{ post.get_absolute_url }}" class="text-white">{{ post.title }}</a>
+                    </h3>
+                    
+                    <p class="card-description">{{ post.excerpt|truncatewords:15 }}</p>
+                    
+                    <div class="card-footer">
+                        <a href="{{ post.get_absolute_url }}" class="btn btn-ghost btn-sm">
+                            <i class="fas fa-arrow-right"></i>
+                            Read More
+                        </a>
+                    </div>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+        
+        <div class="text-center mt-xl">
+            <a href="{% url 'portfolio:blog_list' %}" class="btn btn-primary btn-lg">
+                <i class="fas fa-blog"></i>
+                View All Posts
+            </a>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Latest News Section -->
+{% if latest_news %}
+<section class="section" id="latest-news">
+    <div class="container">
+        <div class="text-center mb-xl">
+            <h2 class="animate-fadeInDown">Latest <span class="text-purple">Updates</span></h2>
+            <p class="text-lg opacity-90">
+                Recent achievements, milestones, and professional developments
+            </p>
+        </div>
+        
+        <div class="timeline">
+            {% for news in latest_news %}
+            <div class="timeline-item {% if news.important %}current{% endif %} animate-fadeInLeft">
+                <div class="timeline-date">
+                    {{ news.published_at|date:"M d, Y" }}
+                    {% if news.important %}
+                    <span class="tag">Featured</span>
+                    {% endif %}
+                </div>
+                <h3 class="timeline-title">{{ news.title }}</h3>
+                <p class="timeline-description">{{ news.summary|truncatewords:25 }}</p>
+                {% if news.link %}
+                <a href="{{ news.link }}" target="_blank" class="btn btn-ghost btn-sm mt-sm">
+                    <i class="fas fa-external-link-alt"></i>
+                    Learn More
+                </a>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div class="text-center mt-xl">
+            <a href="{% url 'portfolio:news' %}" class="btn btn-primary btn-lg">
+                <i class="fas fa-newspaper"></i>
+                View All News
+            </a>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Call to Action Section -->
+<section class="section bg-secondary" id="cta">
+    <div class="container text-center">
+        <div class="animate-fadeInUp">
+            <h2 class="mb-md">Ready to Collaborate on <span class="text-purple">AI Innovation</span>?</h2>
+            <p class="text-lg mb-xl opacity-90">
+                Let's discuss how AI/ML can transform your business and create intelligent solutions together.
+            </p>
+            <div class="flex gap-md justify-center">
+                <a href="{% url 'portfolio:contact' %}" class="btn btn-primary btn-lg">
+                    <i class="fas fa-handshake"></i>
+                    Start a Conversation
+                </a>
+                <a href="{% url 'portfolio:project_list' %}" class="btn btn-secondary btn-lg">
+                    <i class="fas fa-lightbulb"></i>
+                    Explore My Work
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .skill-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-xs);
+        justify-content: center;
+        margin-top: var(--space-md);
+    }
+    
+    .blog-image {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+    }
+    
+    .project-image {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        transition: transform var(--transition-base);
+    }
+    
+    .project-card:hover .project-image {
+        transform: scale(1.05);
+    }
+    
+    .timeline-description {
+        color: var(--light-text);
+        opacity: 0.9;
+        margin-bottom: var(--space-md);
+    }
+    
+    @media (max-width: 768px) {
+        .hero-title {
+            font-size: var(--font-size-3xl);
+        }
+        
+        .grid-3,
+        .grid-4 {
+            grid-template-columns: 1fr;
+        }
+        
+        .flex.gap-md {
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .btn-lg {
+            width: 100%;
+            max-width: 300px;
+        }
+    }
+</style>
+{% endblock %}

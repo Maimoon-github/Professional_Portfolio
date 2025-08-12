@@ -1,0 +1,749 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Contact{% endblock %}
+{% block meta_description %}Get in touch to discuss AI/ML projects, collaboration opportunities, or technical consultations. Let's work together on innovative solutions.{% endblock %}
+
+{% block content %}
+<!-- Contact Header -->
+<section class="section-sm" style="padding-top: 120px;">
+    <div class="container">
+        <div class="text-center mb-xl">
+            <h1 class="animate-fadeInDown">Let's <span class="text-purple">Collaborate</span></h1>
+            <p class="text-lg opacity-90">
+                Ready to discuss innovative AI/ML solutions? Let's explore how we can work together to transform your ideas into intelligent applications.
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Form & Info -->
+<section class="section-sm">
+    <div class="container">
+        <div class="grid grid-2" style="gap: var(--space-3xl); align-items: start;">
+            <!-- Contact Form -->
+            <div class="contact-form-section animate-fadeInLeft">
+                <div class="card">
+                    <h2 class="mb-lg">Send a <span class="text-purple">Message</span></h2>
+                    
+                    <form class="contact-form" method="POST" action="{% url 'portfolio:contact' %}">
+                        {% csrf_token %}
+                        
+                        <div class="form-group">
+                            <label for="name" class="form-label">Full Name</label>
+                            <input type="text" 
+                                   id="name" 
+                                   name="name" 
+                                   class="form-input" 
+                                   placeholder="Enter your full name"
+                                   required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email" class="form-label">Email Address</label>
+                            <input type="email" 
+                                   id="email" 
+                                   name="email" 
+                                   class="form-input" 
+                                   placeholder="Enter your email address"
+                                   required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="subject" class="form-label">Subject</label>
+                            <select id="subject" name="subject" class="form-select" required>
+                                <option value="">Select a topic</option>
+                                <option value="collaboration">Collaboration Opportunity</option>
+                                <option value="consultation">Technical Consultation</option>
+                                <option value="project">Project Discussion</option>
+                                <option value="speaking">Speaking Engagement</option>
+                                <option value="mentoring">Mentoring Request</option>
+                                <option value="general">General Inquiry</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="message" class="form-label">Message</label>
+                            <textarea id="message" 
+                                      name="message" 
+                                      class="form-textarea" 
+                                      placeholder="Tell me about your project, idea, or how we can work together..."
+                                      required
+                                      rows="6"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="newsletter" value="yes">
+                                <span class="checkmark"></span>
+                                Subscribe to newsletter for AI/ML insights and updates
+                            </label>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;">
+                            <i class="fas fa-paper-plane"></i>
+                            Send Message
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Contact Information -->
+            <div class="contact-info-section animate-fadeInRight">
+                <!-- Contact Details -->
+                <div class="card mb-lg">
+                    <h3 class="mb-md">Get in <span class="text-purple">Touch</span></h3>
+                    <p class="mb-lg opacity-90">
+                        Available for AI/ML consultations, collaborative projects, and technical discussions. 
+                        Let's explore how artificial intelligence can transform your business.
+                    </p>
+                    
+                    <div class="contact-details">
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="contact-text">
+                                <strong>Email</strong>
+                                <span>your.email@domain.com</span>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                            <div class="contact-text">
+                                <strong>Phone</strong>
+                                <span>+1 (555) 123-4567</span>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div class="contact-text">
+                                <strong>Location</strong>
+                                <span>Your City, Country</span>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="contact-text">
+                                <strong>Response Time</strong>
+                                <span>Usually within 24 hours</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Social Links -->
+                <div class="card mb-lg">
+                    <h3 class="mb-md">Connect on <span class="text-purple">Social</span></h3>
+                    <p class="mb-md opacity-90">Follow for the latest updates and insights</p>
+                    
+                    <div class="social-links-grid">
+                        <a href="#" class="social-card" target="_blank">
+                            <i class="fab fa-linkedin-in"></i>
+                            <span>LinkedIn</span>
+                        </a>
+                        <a href="#" class="social-card" target="_blank">
+                            <i class="fab fa-github"></i>
+                            <span>GitHub</span>
+                        </a>
+                        <a href="#" class="social-card" target="_blank">
+                            <i class="fab fa-twitter"></i>
+                            <span>Twitter</span>
+                        </a>
+                        <a href="#" class="social-card" target="_blank">
+                            <i class="fas fa-blog"></i>
+                            <span>Medium</span>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Quick Actions -->
+                <div class="card">
+                    <h3 class="mb-md">Quick <span class="text-purple">Actions</span></h3>
+                    
+                    <div class="quick-actions">
+                        <a href="{% url 'portfolio:project_list' %}" class="action-button">
+                            <i class="fas fa-folder-open"></i>
+                            <div>
+                                <strong>View Projects</strong>
+                                <span>Explore my AI/ML portfolio</span>
+                            </div>
+                        </a>
+                        
+                        <a href="{% url 'portfolio:experience' %}" class="action-button">
+                            <i class="fas fa-user-tie"></i>
+                            <div>
+                                <strong>View Experience</strong>
+                                <span>Professional background</span>
+                            </div>
+                        </a>
+                        
+                        <a href="{% url 'portfolio:blog_list' %}" class="action-button">
+                            <i class="fas fa-blog"></i>
+                            <div>
+                                <strong>Read Blog</strong>
+                                <span>AI/ML insights and tutorials</span>
+                            </div>
+                        </a>
+                        
+                        <a href="#" class="action-button" onclick="downloadResume()">
+                            <i class="fas fa-download"></i>
+                            <div>
+                                <strong>Download Resume</strong>
+                                <span>PDF format available</span>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Services Overview -->
+<section class="section bg-secondary">
+    <div class="container">
+        <div class="text-center mb-xl">
+            <h2 class="animate-fadeInDown">How I Can <span class="text-purple">Help</span></h2>
+            <p class="text-lg opacity-90">
+                Specialized AI/ML services and consultation areas
+            </p>
+        </div>
+        
+        <div class="grid grid-3">
+            <div class="service-card animate-fadeInUp">
+                <div class="service-icon">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <h4>AI/ML Development</h4>
+                <p>Custom machine learning models, neural networks, and AI system development tailored to your specific needs.</p>
+                <ul class="service-features">
+                    <li>Deep Learning Models</li>
+                    <li>Computer Vision Solutions</li>
+                    <li>Natural Language Processing</li>
+                    <li>Predictive Analytics</li>
+                </ul>
+            </div>
+            
+            <div class="service-card animate-fadeInUp">
+                <div class="service-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h4>Data Science Consulting</h4>
+                <p>Strategic guidance on data-driven decision making, analytics implementation, and insight generation.</p>
+                <ul class="service-features">
+                    <li>Data Strategy</li>
+                    <li>Analytics Implementation</li>
+                    <li>Statistical Modeling</li>
+                    <li>Business Intelligence</li>
+                </ul>
+            </div>
+            
+            <div class="service-card animate-fadeInUp">
+                <div class="service-icon">
+                    <i class="fas fa-rocket"></i>
+                </div>
+                <h4>Technical Leadership</h4>
+                <p>Leading AI/ML initiatives, team mentoring, and strategic technology planning for organizations.</p>
+                <ul class="service-features">
+                    <li>Team Leadership</li>
+                    <li>Technical Mentoring</li>
+                    <li>Architecture Design</li>
+                    <li>Project Management</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="section">
+    <div class="container">
+        <div class="text-center mb-xl">
+            <h2 class="animate-fadeInDown">Frequently Asked <span class="text-purple">Questions</span></h2>
+        </div>
+        
+        <div class="faq-container" style="max-width: 800px; margin: 0 auto;">
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <h4>What types of AI/ML projects do you work on?</h4>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>I specialize in a wide range of AI/ML projects including computer vision applications, natural language processing systems, predictive analytics, deep learning models, and agentic AI systems. From research prototypes to production-ready solutions.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <h4>What is your typical project timeline?</h4>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Project timelines vary based on complexity and scope. Small proof-of-concepts typically take 2-4 weeks, while comprehensive AI systems can take 3-6 months. I provide detailed timelines during initial consultations.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <h4>Do you offer training and mentoring services?</h4>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Yes, I provide technical mentoring, team training, and knowledge transfer services. This includes AI/ML fundamentals, advanced techniques, best practices, and hands-on workshops tailored to your team's needs.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <h4>What industries do you have experience with?</h4>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>I have experience across healthcare, finance, technology, e-commerce, manufacturing, and education sectors. AI/ML principles are broadly applicable, and I adapt solutions to specific industry requirements and regulations.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .contact-details {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-lg);
+    }
+    
+    .contact-item {
+        display: flex;
+        align-items: center;
+        gap: var(--space-md);
+    }
+    
+    .contact-icon {
+        width: 50px;
+        height: 50px;
+        background: var(--purple-20);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--accent-purple);
+        font-size: var(--font-size-lg);
+        flex-shrink: 0;
+    }
+    
+    .contact-text {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-xs);
+    }
+    
+    .contact-text strong {
+        color: var(--white);
+        font-weight: 600;
+    }
+    
+    .contact-text span {
+        color: var(--light-text);
+        opacity: 0.9;
+    }
+    
+    .social-links-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-md);
+    }
+    
+    .social-card {
+        display: flex;
+        align-items: center;
+        gap: var(--space-sm);
+        padding: var(--space-md);
+        background: var(--purple-10);
+        border: 1px solid var(--purple-20);
+        border-radius: var(--radius-md);
+        color: var(--light-text);
+        text-decoration: none;
+        transition: all var(--transition-base);
+    }
+    
+    .social-card:hover {
+        background: var(--purple-20);
+        border-color: var(--accent-purple);
+        color: var(--white);
+        transform: translateY(-2px);
+    }
+    
+    .social-card i {
+        font-size: var(--font-size-lg);
+        color: var(--accent-purple);
+    }
+    
+    .quick-actions {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-md);
+    }
+    
+    .action-button {
+        display: flex;
+        align-items: center;
+        gap: var(--space-md);
+        padding: var(--space-md);
+        background: var(--purple-10);
+        border: 1px solid var(--purple-20);
+        border-radius: var(--radius-md);
+        color: var(--light-text);
+        text-decoration: none;
+        transition: all var(--transition-base);
+    }
+    
+    .action-button:hover {
+        background: var(--purple-20);
+        border-color: var(--accent-purple);
+        color: var(--white);
+        transform: translateX(4px);
+    }
+    
+    .action-button i {
+        font-size: var(--font-size-xl);
+        color: var(--accent-purple);
+        width: 30px;
+        text-align: center;
+    }
+    
+    .action-button div {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-xs);
+    }
+    
+    .action-button strong {
+        color: var(--white);
+        font-weight: 600;
+    }
+    
+    .action-button span {
+        font-size: var(--font-size-sm);
+        opacity: 0.8;
+    }
+    
+    .service-card {
+        background: var(--secondary-dark);
+        padding: var(--space-xl);
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--purple-10);
+        text-align: center;
+        transition: all var(--transition-base);
+    }
+    
+    .service-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-lg);
+        border-color: var(--purple-40);
+    }
+    
+    .service-icon {
+        width: 80px;
+        height: 80px;
+        background: var(--purple-20);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto var(--space-lg);
+        color: var(--accent-purple);
+        font-size: var(--font-size-2xl);
+        transition: all var(--transition-base);
+    }
+    
+    .service-card:hover .service-icon {
+        background: var(--accent-purple);
+        color: var(--white);
+        transform: scale(1.1);
+    }
+    
+    .service-features {
+        list-style: none;
+        padding: 0;
+        margin-top: var(--space-md);
+    }
+    
+    .service-features li {
+        padding: var(--space-xs) 0;
+        color: var(--light-text);
+        opacity: 0.9;
+        position: relative;
+        padding-left: var(--space-md);
+    }
+    
+    .service-features li:before {
+        content: '•';
+        color: var(--accent-purple);
+        position: absolute;
+        left: 0;
+        font-weight: bold;
+    }
+    
+    .checkbox-label {
+        display: flex;
+        align-items: center;
+        gap: var(--space-sm);
+        cursor: pointer;
+        font-size: var(--font-size-sm);
+        color: var(--light-text);
+    }
+    
+    .checkbox-label input[type="checkbox"] {
+        margin: 0;
+        width: 18px;
+        height: 18px;
+        accent-color: var(--accent-purple);
+    }
+    
+    .faq-container {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-md);
+    }
+    
+    .faq-item {
+        background: var(--secondary-dark);
+        border: 1px solid var(--purple-10);
+        border-radius: var(--radius-md);
+        overflow: hidden;
+        transition: all var(--transition-base);
+    }
+    
+    .faq-item:hover {
+        border-color: var(--purple-40);
+    }
+    
+    .faq-question {
+        padding: var(--space-lg);
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: all var(--transition-base);
+    }
+    
+    .faq-question:hover {
+        background: var(--purple-10);
+    }
+    
+    .faq-question h4 {
+        margin: 0;
+        color: var(--white);
+        font-weight: 600;
+    }
+    
+    .faq-question i {
+        color: var(--accent-purple);
+        transition: transform var(--transition-base);
+    }
+    
+    .faq-item.active .faq-question i {
+        transform: rotate(180deg);
+    }
+    
+    .faq-answer {
+        padding: 0 var(--space-lg);
+        max-height: 0;
+        overflow: hidden;
+        transition: all var(--transition-base);
+    }
+    
+    .faq-item.active .faq-answer {
+        padding: var(--space-lg);
+        max-height: 500px;
+    }
+    
+    .faq-answer p {
+        margin: 0;
+        color: var(--light-text);
+        opacity: 0.9;
+        line-height: 1.6;
+    }
+    
+    @media (max-width: 768px) {
+        .grid-2 {
+            grid-template-columns: 1fr;
+            gap: var(--space-xl);
+        }
+        
+        .social-links-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .grid-3 {
+            grid-template-columns: 1fr;
+        }
+        
+        .service-card {
+            padding: var(--space-lg);
+        }
+        
+        .service-icon {
+            width: 60px;
+            height: 60px;
+            font-size: var(--font-size-xl);
+        }
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function toggleFAQ(element) {
+    const faqItem = element.parentElement;
+    const isActive = faqItem.classList.contains('active');
+    
+    // Close all FAQ items
+    document.querySelectorAll('.faq-item').forEach(item => {
+        item.classList.remove('active');
+    });
+    
+    // Open clicked item if it wasn't active
+    if (!isActive) {
+        faqItem.classList.add('active');
+    }
+}
+
+function downloadResume() {
+    // In a real implementation, this would trigger a download
+    alert('Resume download would be implemented here');
+    
+    // Example implementation:
+    // const link = document.createElement('a');
+    // link.href = '{% static "files/resume.pdf" %}';
+    // link.download = 'AI_ML_Data_Scientist_Resume.pdf';
+    // link.click();
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const contactForm = document.querySelector('.contact-form');
+    
+    if (contactForm) {
+        contactForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form data
+            const formData = new FormData(this);
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            
+            // Show loading state
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+            submitBtn.disabled = true;
+            
+            // Simulate form submission (replace with actual submission logic)
+            setTimeout(() => {
+                // Show success message
+                submitBtn.innerHTML = '<i class="fas fa-check"></i> Message Sent!';
+                
+                // Create success notification
+                const notification = document.createElement('div');
+                notification.innerHTML = `
+                    <div style="
+                        position: fixed;
+                        top: 20px;
+                        right: 20px;
+                        background: var(--accent-purple);
+                        color: white;
+                        padding: 16px 20px;
+                        border-radius: 8px;
+                        z-index: 9999;
+                        animation: slideInRight 0.3s ease-out;
+                    ">
+                        <i class="fas fa-check"></i> Thank you! I'll respond within 24 hours.
+                    </div>
+                `;
+                document.body.appendChild(notification);
+                
+                // Remove notification after 5 seconds
+                setTimeout(() => {
+                    notification.remove();
+                }, 5000);
+                
+                // Reset form after 3 seconds
+                setTimeout(() => {
+                    this.reset();
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
+                }, 3000);
+            }, 2000);
+        });
+        
+        // Form validation and enhancement
+        const inputs = contactForm.querySelectorAll('input, textarea, select');
+        inputs.forEach(input => {
+            input.addEventListener('blur', function() {
+                validateField(this);
+            });
+        });
+    }
+    
+    function validateField(field) {
+        const value = field.value.trim();
+        let isValid = true;
+        
+        // Remove existing error styling
+        field.classList.remove('error');
+        
+        // Basic validation
+        if (field.hasAttribute('required') && !value) {
+            isValid = false;
+        }
+        
+        if (field.type === 'email' && value && !isValidEmail(value)) {
+            isValid = false;
+        }
+        
+        // Add error styling if invalid
+        if (!isValid) {
+            field.classList.add('error');
+            field.style.borderColor = 'var(--error)';
+        } else {
+            field.style.borderColor = 'var(--purple-20)';
+        }
+        
+        return isValid;
+    }
+    
+    function isValidEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
+});
+
+// Add slide in animation
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes slideInRight {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+`;
+document.head.appendChild(style);
+</script>
+{% endblock %}

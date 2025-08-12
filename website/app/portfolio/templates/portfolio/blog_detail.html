@@ -1,0 +1,577 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ post.title }}{% endblock %}
+{% block meta_description %}{{ post.excerpt|default:post.content|striptags|truncatewords:25 }}{% endblock %}
+
+{% block content %}
+<!-- Blog Post Header -->
+<section class="section-sm" style="padding-top: 120px;">
+    <div class="container">
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb mb-lg" style="font-size: var(--font-size-sm); color: var(--light-text); opacity: 0.8;">
+            <a href="{% url 'portfolio:index' %}" class="text-purple">Home</a>
+            <span class="mx-2">/</span>
+            <a href="{% url 'portfolio:blog_list' %}" class="text-purple">Blog</a>
+            <span class="mx-2">/</span>
+            <span>{{ post.title|truncatewords:5 }}</span>
+        </nav>
+        
+        <article class="blog-post">
+            <!-- Post Header -->
+            <header class="post-header text-center mb-xl animate-fadeInDown">
+                <div class="post-meta mb-md">
+                    {% if post.category %}
+                    <span class="post-category">{{ post.category.name }}</span>
+                    {% endif %}
+                    <span class="post-date">
+                        <i class="fas fa-calendar"></i>
+                        {{ post.published_at|date:"F d, Y" }}
+                    </span>
+                    <span class="post-reading-time">
+                        <i class="fas fa-clock"></i>
+                        {% widthratio post.content|length 1000 5 %} min read
+                    </span>
+                </div>
+                
+                <h1 class="post-title">{{ post.title }}</h1>
+                
+                {% if post.excerpt %}
+                <p class="post-excerpt">{{ post.excerpt }}</p>
+                {% endif %}
+                
+                <div class="post-author-info">
+                    {% if post.author %}
+                    <div class="author-avatar">
+                        <i class="fas fa-user fa-2x text-purple"></i>
+                    </div>
+                    <div class="author-details">
+                        <div class="author-name">{{ post.author.get_full_name|default:post.author.username }}</div>
+                        <div class="author-title">AI/ML Data Scientist</div>
+                    </div>
+                    {% endif %}
+                </div>
+            </header>
+            
+            <!-- Featured Image -->
+            {% if post.cover_image %}
+            <div class="post-featured-image mb-xl animate-fadeInUp">
+                <img src="{{ post.cover_image.url }}" alt="{{ post.title }}" 
+                     class="rounded-lg shadow-lg" style="width: 100%; height: auto; max-height: 500px; object-fit: cover;">
+            </div>
+            {% endif %}
+            
+            <!-- Post Content -->
+            <div class="post-content max-width-prose animate-fadeInUp" style="max-width: 800px; margin: 0 auto;">
+                <div class="content-wrapper">
+                    {{ post.content|linebreaks }}
+                </div>
+            </div>
+            
+            <!-- Post Tags -->
+            {% if post.tags.all %}
+            <div class="post-tags text-center mt-xl animate-fadeInUp">
+                <h4 class="mb-md">Related Topics</h4>
+                <div class="tags-cloud">
+                    {% for tag in post.tags.all %}
+                    <span class="tag tag-large">{{ tag.name }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+            
+            <!-- Post Footer -->
+            <footer class="post-footer mt-xl animate-fadeInUp">
+                <div class="post-actions">
+                    <div class="share-section">
+                        <h4>Share this post</h4>
+                        <div class="social-share flex gap-md">
+                            <a href="#" class="social-link" onclick="sharePost('twitter')" aria-label="Share on Twitter">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                            <a href="#" class="social-link" onclick="sharePost('linkedin')" aria-label="Share on LinkedIn">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                            <a href="#" class="social-link" onclick="sharePost('facebook')" aria-label="Share on Facebook">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                            <a href="#" class="social-link" onclick="sharePost('email')" aria-label="Share via Email">
+                                <i class="fas fa-envelope"></i>
+                            </a>
+                            <a href="#" class="social-link" onclick="copyToClipboard()" aria-label="Copy Link">
+                                <i class="fas fa-link"></i>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="post-navigation">
+                        <a href="{% url 'portfolio:blog_list' %}" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i>
+                            Back to Blog
+                        </a>
+                        <a href="{% url 'portfolio:contact' %}" class="btn btn-primary">
+                            <i class="fas fa-comments"></i>
+                            Discuss This Post
+                        </a>
+                    </div>
+                </div>
+            </footer>
+        </article>
+    </div>
+</section>
+
+<!-- Author Bio Section -->
+<section class="section bg-secondary">
+    <div class="container">
+        <div class="author-bio card" style="max-width: 800px; margin: 0 auto;">
+            <div class="flex gap-lg items-center">
+                <div class="author-avatar-large">
+                    <i class="fas fa-user fa-4x text-purple"></i>
+                </div>
+                <div class="author-info">
+                    <h3>
+                        {% if post.author %}
+                        {{ post.author.get_full_name|default:post.author.username }}
+                        {% else %}
+                        Author
+                        {% endif %}
+                    </h3>
+                    <p class="author-title text-purple mb-md">AI/ML Data Scientist & Technical Writer</p>
+                    <p class="author-description">
+                        Passionate about bridging the gap between complex AI research and practical business applications. 
+                        Specializing in deep learning, computer vision, and agentic AI systems with a focus on elegant 
+                        design and user-centered thinking.
+                    </p>
+                    <div class="author-links flex gap-md mt-md">
+                        <a href="{% url 'portfolio:project_list' %}" class="btn btn-ghost btn-sm">
+                            <i class="fas fa-folder-open"></i>
+                            View Projects
+                        </a>
+                        <a href="{% url 'portfolio:contact' %}" class="btn btn-ghost btn-sm">
+                            <i class="fas fa-envelope"></i>
+                            Get in Touch
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Related Posts -->
+<section class="section">
+    <div class="container">
+        <div class="text-center mb-xl">
+            <h2>Related <span class="text-purple">Articles</span></h2>
+            <p class="text-lg opacity-90">Continue exploring AI/ML insights and technical content</p>
+        </div>
+        
+        <div class="grid grid-3">
+            <!-- Placeholder for related posts - in a real implementation, these would be dynamically populated -->
+            <div class="card text-center">
+                <i class="fas fa-brain fa-3x text-purple mb-md"></i>
+                <h4>Understanding Neural Networks</h4>
+                <p>A comprehensive guide to neural network architectures and training methodologies.</p>
+                <a href="#" class="btn btn-ghost btn-sm mt-md">
+                    <i class="fas fa-arrow-right"></i>
+                    Read Article
+                </a>
+            </div>
+            
+            <div class="card text-center">
+                <i class="fas fa-robot fa-3x text-purple mb-md"></i>
+                <h4>Agentic AI Systems</h4>
+                <p>Exploring the future of autonomous AI agents and multi-agent frameworks.</p>
+                <a href="#" class="btn btn-ghost btn-sm mt-md">
+                    <i class="fas fa-arrow-right"></i>
+                    Read Article
+                </a>
+            </div>
+            
+            <div class="card text-center">
+                <i class="fas fa-chart-line fa-3x text-purple mb-md"></i>
+                <h4>MLOps Best Practices</h4>
+                <p>Production-ready machine learning: deployment, monitoring, and scaling strategies.</p>
+                <a href="#" class="btn btn-ghost btn-sm mt-md">
+                    <i class="fas fa-arrow-right"></i>
+                    Read Article
+                </a>
+            </div>
+        </div>
+        
+        <div class="text-center mt-xl">
+            <a href="{% url 'portfolio:blog_list' %}" class="btn btn-primary btn-lg">
+                <i class="fas fa-blog"></i>
+                Explore All Articles
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Newsletter Signup -->
+<section class="section bg-secondary">
+    <div class="container">
+        <div class="text-center">
+            <div class="card" style="max-width: 600px; margin: 0 auto;">
+                <h2 class="mb-md">Enjoyed this <span class="text-purple">Article</span>?</h2>
+                <p class="mb-lg opacity-90">
+                    Subscribe to receive the latest AI/ML insights, tutorials, and industry analysis directly in your inbox.
+                </p>
+                
+                <form class="newsletter-form" style="display: flex; gap: var(--space-sm); max-width: 400px; margin: 0 auto;">
+                    <input type="email" class="form-input" placeholder="Enter your email" required style="flex: 1;">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-paper-plane"></i>
+                        Subscribe
+                    </button>
+                </form>
+                
+                <p class="mt-md text-sm opacity-75">
+                    <i class="fas fa-shield-alt text-purple"></i>
+                    No spam, unsubscribe at any time.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .post-meta {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: var(--space-lg);
+        font-size: var(--font-size-sm);
+        color: var(--light-text);
+        opacity: 0.8;
+    }
+    
+    .post-meta > span {
+        display: flex;
+        align-items: center;
+        gap: var(--space-xs);
+    }
+    
+    .post-category {
+        background: var(--accent-purple);
+        color: var(--white);
+        padding: var(--space-xs) var(--space-sm);
+        border-radius: var(--radius-full);
+        font-weight: 500;
+    }
+    
+    .post-title {
+        font-size: clamp(2rem, 5vw, 3rem);
+        font-weight: 700;
+        line-height: 1.2;
+        margin-bottom: var(--space-md);
+        color: var(--white);
+    }
+    
+    .post-excerpt {
+        font-size: var(--font-size-xl);
+        color: var(--light-text);
+        opacity: 0.9;
+        line-height: 1.6;
+        max-width: 700px;
+        margin: 0 auto var(--space-xl);
+    }
+    
+    .post-author-info {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--space-md);
+        margin-top: var(--space-xl);
+    }
+    
+    .author-avatar {
+        width: 60px;
+        height: 60px;
+        background: var(--purple-20);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .author-details {
+        text-align: left;
+    }
+    
+    .author-name {
+        font-weight: 600;
+        color: var(--white);
+        font-size: var(--font-size-lg);
+    }
+    
+    .author-title {
+        color: var(--accent-purple);
+        font-size: var(--font-size-sm);
+    }
+    
+    .content-wrapper {
+        font-size: var(--font-size-lg);
+        line-height: 1.8;
+        color: var(--light-text);
+    }
+    
+    .content-wrapper p {
+        margin-bottom: var(--space-lg);
+    }
+    
+    .content-wrapper h2,
+    .content-wrapper h3,
+    .content-wrapper h4 {
+        color: var(--white);
+        margin-top: var(--space-2xl);
+        margin-bottom: var(--space-md);
+    }
+    
+    .content-wrapper h2 {
+        font-size: var(--font-size-2xl);
+        border-bottom: 2px solid var(--purple-20);
+        padding-bottom: var(--space-sm);
+    }
+    
+    .content-wrapper ul,
+    .content-wrapper ol {
+        margin-bottom: var(--space-lg);
+        padding-left: var(--space-xl);
+    }
+    
+    .content-wrapper li {
+        margin-bottom: var(--space-sm);
+    }
+    
+    .content-wrapper blockquote {
+        background: var(--secondary-dark);
+        border-left: 4px solid var(--accent-purple);
+        margin: var(--space-xl) 0;
+        padding: var(--space-lg);
+        border-radius: var(--radius-md);
+        font-style: italic;
+        position: relative;
+    }
+    
+    .content-wrapper code {
+        background: var(--secondary-dark);
+        color: var(--accent-purple);
+        padding: 2px 6px;
+        border-radius: var(--radius-sm);
+        font-family: 'Courier New', monospace;
+    }
+    
+    .content-wrapper pre {
+        background: var(--secondary-dark);
+        padding: var(--space-lg);
+        border-radius: var(--radius-md);
+        overflow-x: auto;
+        margin-bottom: var(--space-lg);
+        border: 1px solid var(--purple-20);
+    }
+    
+    .content-wrapper pre code {
+        background: none;
+        padding: 0;
+        color: var(--light-text);
+    }
+    
+    .tags-cloud {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: var(--space-sm);
+    }
+    
+    .tag-large {
+        padding: var(--space-sm) var(--space-md);
+        font-size: var(--font-size-base);
+    }
+    
+    .post-footer {
+        border-top: 1px solid var(--purple-20);
+        padding-top: var(--space-xl);
+    }
+    
+    .post-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--space-xl);
+        align-items: center;
+    }
+    
+    .share-section h4 {
+        margin-bottom: var(--space-md);
+        color: var(--white);
+    }
+    
+    .post-navigation {
+        display: flex;
+        gap: var(--space-md);
+        justify-content: flex-end;
+    }
+    
+    .author-bio {
+        padding: var(--space-xl);
+    }
+    
+    .author-avatar-large {
+        width: 80px;
+        height: 80px;
+        background: var(--purple-20);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+    
+    .author-description {
+        color: var(--light-text);
+        opacity: 0.9;
+        line-height: 1.6;
+        margin-bottom: var(--space-md);
+    }
+    
+    .newsletter-form input {
+        margin-bottom: 0;
+    }
+    
+    @media (max-width: 768px) {
+        .post-meta {
+            flex-direction: column;
+            gap: var(--space-sm);
+        }
+        
+        .post-author-info {
+            flex-direction: column;
+            text-align: center;
+        }
+        
+        .author-details {
+            text-align: center;
+        }
+        
+        .post-actions {
+            grid-template-columns: 1fr;
+            gap: var(--space-lg);
+            text-align: center;
+        }
+        
+        .post-navigation {
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .post-navigation .btn {
+            width: 100%;
+        }
+        
+        .author-bio .flex {
+            flex-direction: column;
+            text-align: center;
+        }
+        
+        .newsletter-form {
+            flex-direction: column;
+        }
+        
+        .newsletter-form .btn {
+            width: 100%;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function sharePost(platform) {
+    const url = window.location.href;
+    const title = '{{ post.title|escapejs }}';
+    const text = '{{ post.excerpt|default:post.content|striptags|truncatewords:20|escapejs }}';
+    
+    let shareUrl = '';
+    
+    switch(platform) {
+        case 'twitter':
+            shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}`;
+            break;
+        case 'linkedin':
+            shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`;
+            break;
+        case 'facebook':
+            shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+            break;
+        case 'email':
+            shareUrl = `mailto:?subject=${encodeURIComponent(title)}&body=${encodeURIComponent(text + ' ' + url)}`;
+            break;
+    }
+    
+    if (shareUrl) {
+        window.open(shareUrl, '_blank', 'width=600,height=400');
+    }
+}
+
+function copyToClipboard() {
+    const url = window.location.href;
+    
+    if (navigator.clipboard && window.isSecureContext) {
+        // Use the Clipboard API
+        navigator.clipboard.writeText(url).then(() => {
+            showCopySuccess();
+        });
+    } else {
+        // Fallback for older browsers
+        const textArea = document.createElement('textarea');
+        textArea.value = url;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+        showCopySuccess();
+    }
+}
+
+function showCopySuccess() {
+    const copyButton = document.querySelector('[onclick="copyToClipboard()"]');
+    const originalIcon = copyButton.innerHTML;
+    
+    copyButton.innerHTML = '<i class="fas fa-check"></i>';
+    copyButton.style.color = 'var(--success)';
+    
+    setTimeout(() => {
+        copyButton.innerHTML = originalIcon;
+        copyButton.style.color = '';
+    }, 2000);
+}
+
+// Newsletter form handling
+document.addEventListener('DOMContentLoaded', function() {
+    const newsletterForm = document.querySelector('.newsletter-form');
+    if (newsletterForm) {
+        newsletterForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = this.querySelector('input[type="email"]').value;
+            
+            // Here you would typically send the email to your backend
+            console.log('Newsletter signup:', email);
+            
+            // Show success message
+            const button = this.querySelector('button');
+            const originalText = button.innerHTML;
+            button.innerHTML = '<i class="fas fa-check"></i> Subscribed!';
+            button.disabled = true;
+            
+            setTimeout(() => {
+                button.innerHTML = originalText;
+                button.disabled = false;
+                this.reset();
+            }, 3000);
+        });
+    }
+});
+</script>
+{% endblock %}

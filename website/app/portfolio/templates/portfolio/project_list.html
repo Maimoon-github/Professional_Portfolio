@@ -1,0 +1,378 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Projects{% endblock %}
+{% block meta_description %}Explore my AI/ML projects showcasing expertise in Deep Learning, Computer Vision, NLP, and Agentic AI Systems. Technical case studies and innovative solutions.{% endblock %}
+
+{% block content %}
+<!-- Projects Header -->
+<section class="section-sm" style="padding-top: 120px;">
+    <div class="container">
+        <div class="text-center mb-xl">
+            <h1 class="animate-fadeInDown">AI/ML <span class="text-purple">Projects</span></h1>
+            <p class="text-lg opacity-90">
+                A comprehensive showcase of innovative AI/ML solutions, technical case studies, and cutting-edge implementations
+            </p>
+        </div>
+        
+        <!-- Project Filters -->
+        <div class="text-center mb-lg">
+            <div class="project-filters flex justify-center gap-sm" style="flex-wrap: wrap;">
+                <button class="btn btn-ghost btn-sm active" data-filter="all">
+                    <i class="fas fa-th"></i>
+                    All Projects
+                </button>
+                <button class="btn btn-ghost btn-sm" data-filter="machine-learning">
+                    <i class="fas fa-brain"></i>
+                    Machine Learning
+                </button>
+                <button class="btn btn-ghost btn-sm" data-filter="deep-learning">
+                    <i class="fas fa-network-wired"></i>
+                    Deep Learning
+                </button>
+                <button class="btn btn-ghost btn-sm" data-filter="computer-vision">
+                    <i class="fas fa-eye"></i>
+                    Computer Vision
+                </button>
+                <button class="btn btn-ghost btn-sm" data-filter="nlp">
+                    <i class="fas fa-language"></i>
+                    NLP
+                </button>
+                <button class="btn btn-ghost btn-sm" data-filter="web-development">
+                    <i class="fas fa-globe"></i>
+                    Web Development
+                </button>
+                <button class="btn btn-ghost btn-sm" data-filter="data-science">
+                    <i class="fas fa-chart-bar"></i>
+                    Data Science
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Projects Grid -->
+<section class="section-sm">
+    <div class="container">
+        {% if projects %}
+        <div class="grid grid-3" id="projects-grid">
+            {% for project in projects %}
+            <div class="project-card animate-fadeInUp" 
+                 data-category="{{ project.category.slug|default:'all' }}"
+                 data-searchable="{{ project.title|lower }} {{ project.summary|lower }} {{ project.category.name|lower|default:'' }}">
+                
+                <!-- Project Image -->
+                {% if project.hero_image %}
+                <img src="{{ project.hero_image.url }}" alt="{{ project.title }}" class="project-image">
+                {% else %}
+                <div class="project-image" style="background: linear-gradient(135deg, var(--accent-purple), var(--secondary-dark)); display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-project-diagram fa-3x text-white opacity-50"></i>
+                </div>
+                {% endif %}
+                
+                <div class="project-content">
+                    <!-- Project Header -->
+                    <div class="project-header mb-md">
+                        <h3 class="project-title">
+                            <a href="{{ project.get_absolute_url }}" class="text-white">{{ project.title }}</a>
+                        </h3>
+                        {% if project.category %}
+                        <span class="project-category">{{ project.category.name }}</span>
+                        {% endif %}
+                        {% if project.featured %}
+                        <span class="tag" style="background: var(--accent-purple); color: white;">Featured</span>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Project Description -->
+                    <p class="project-description">{{ project.summary|truncatewords:25 }}</p>
+                    
+                    <!-- Project Tags -->
+                    {% if project.tags.all %}
+                    <div class="project-tags mb-md">
+                        {% for tag in project.tags.all|slice:":5" %}
+                        <span class="tag">{{ tag.name }}</span>
+                        {% endfor %}
+                        {% if project.tags.all|length > 5 %}
+                        <span class="tag opacity-50">+{{ project.tags.all|length|add:"-5" }} more</span>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Project Meta -->
+                    <div class="project-meta mb-md">
+                        {% if project.published_at %}
+                        <span class="meta-item">
+                            <i class="fas fa-calendar text-purple"></i>
+                            {{ project.published_at|date:"M Y" }}
+                        </span>
+                        {% endif %}
+                        {% if project.status == 'published' %}
+                        <span class="meta-item">
+                            <i class="fas fa-check-circle text-purple"></i>
+                            Published
+                        </span>
+                        {% else %}
+                        <span class="meta-item">
+                            <i class="fas fa-clock text-purple"></i>
+                            {{ project.status|title }}
+                        </span>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Project Links -->
+                    <div class="project-links">
+                        <a href="{{ project.get_absolute_url }}" class="btn btn-primary btn-sm">
+                            <i class="fas fa-eye"></i>
+                            View Details
+                        </a>
+                        {% if project.repository_url %}
+                        <a href="{{ project.repository_url }}" target="_blank" class="btn btn-ghost btn-sm">
+                            <i class="fab fa-github"></i>
+                            Code
+                        </a>
+                        {% endif %}
+                        {% if project.live_url %}
+                        <a href="{{ project.live_url }}" target="_blank" class="btn btn-ghost btn-sm">
+                            <i class="fas fa-external-link-alt"></i>
+                            Live Demo
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <!-- No Results Message -->
+        <div id="no-results" class="text-center" style="display: none;">
+            <div class="card" style="max-width: 500px; margin: 0 auto;">
+                <i class="fas fa-search fa-3x text-purple mb-md"></i>
+                <h3>No Projects Found</h3>
+                <p>Try adjusting your filters or search terms to find what you're looking for.</p>
+                <button class="btn btn-primary" onclick="resetFilters()">
+                    <i class="fas fa-refresh"></i>
+                    Reset Filters
+                </button>
+            </div>
+        </div>
+        
+        {% else %}
+        <!-- Empty State -->
+        <div class="text-center">
+            <div class="card" style="max-width: 500px; margin: 0 auto;">
+                <i class="fas fa-folder-open fa-3x text-purple mb-md"></i>
+                <h3>Projects Coming Soon</h3>
+                <p>I'm currently working on exciting AI/ML projects that will be showcased here soon. Check back for updates!</p>
+                <a href="{% url 'portfolio:contact' %}" class="btn btn-primary">
+                    <i class="fas fa-envelope"></i>
+                    Get Notified
+                </a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Technology Stack Section -->
+<section class="section bg-secondary">
+    <div class="container">
+        <div class="text-center mb-xl">
+            <h2 class="animate-fadeInDown">Technology <span class="text-purple">Stack</span></h2>
+            <p class="text-lg opacity-90">
+                Core technologies and frameworks used across my projects
+            </p>
+        </div>
+        
+        <div class="grid grid-4">
+            <div class="card text-center">
+                <i class="fab fa-python fa-3x text-purple mb-md"></i>
+                <h4>Python Ecosystem</h4>
+                <div class="tech-tags">
+                    <span class="tag">NumPy</span>
+                    <span class="tag">Pandas</span>
+                    <span class="tag">Scikit-learn</span>
+                    <span class="tag">FastAPI</span>
+                </div>
+            </div>
+            
+            <div class="card text-center">
+                <i class="fas fa-brain fa-3x text-purple mb-md"></i>
+                <h4>Deep Learning</h4>
+                <div class="tech-tags">
+                    <span class="tag">TensorFlow</span>
+                    <span class="tag">PyTorch</span>
+                    <span class="tag">Keras</span>
+                    <span class="tag">Transformers</span>
+                </div>
+            </div>
+            
+            <div class="card text-center">
+                <i class="fas fa-cloud fa-3x text-purple mb-md"></i>
+                <h4>Cloud & MLOps</h4>
+                <div class="tech-tags">
+                    <span class="tag">AWS</span>
+                    <span class="tag">Docker</span>
+                    <span class="tag">Kubernetes</span>
+                    <span class="tag">MLflow</span>
+                </div>
+            </div>
+            
+            <div class="card text-center">
+                <i class="fas fa-chart-line fa-3x text-purple mb-md"></i>
+                <h4>Data Visualization</h4>
+                <div class="tech-tags">
+                    <span class="tag">Plotly</span>
+                    <span class="tag">D3.js</span>
+                    <span class="tag">Tableau</span>
+                    <span class="tag">Matplotlib</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action -->
+<section class="section">
+    <div class="container text-center">
+        <div class="animate-fadeInUp">
+            <h2 class="mb-md">Interested in <span class="text-purple">Collaboration</span>?</h2>
+            <p class="text-lg mb-xl opacity-90">
+                Let's discuss how we can work together on innovative AI/ML projects and solutions.
+            </p>
+            <div class="flex gap-md justify-center">
+                <a href="{% url 'portfolio:contact' %}" class="btn btn-primary btn-lg">
+                    <i class="fas fa-handshake"></i>
+                    Start a Project
+                </a>
+                <a href="{% url 'portfolio:experience' %}" class="btn btn-secondary btn-lg">
+                    <i class="fas fa-user-tie"></i>
+                    View Experience
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .project-filters {
+        margin-bottom: var(--space-lg);
+    }
+    
+    .project-filters .btn.active {
+        background: var(--accent-purple);
+        color: var(--white);
+        border-color: var(--accent-purple);
+    }
+    
+    .project-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-sm);
+        font-size: var(--font-size-sm);
+        color: var(--light-text);
+        opacity: 0.8;
+    }
+    
+    .meta-item {
+        display: flex;
+        align-items: center;
+        gap: var(--space-xs);
+    }
+    
+    .tech-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-xs);
+        justify-content: center;
+        margin-top: var(--space-md);
+    }
+    
+    .project-card {
+        transition: all var(--transition-base);
+    }
+    
+    .project-card.hidden {
+        display: none;
+    }
+    
+    @media (max-width: 768px) {
+        .project-filters {
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .project-filters .btn {
+            width: 200px;
+        }
+        
+        .grid-3,
+        .grid-4 {
+            grid-template-columns: 1fr;
+        }
+        
+        .project-links {
+            flex-direction: column;
+            gap: var(--space-xs);
+        }
+        
+        .project-links .btn {
+            width: 100%;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const filterButtons = document.querySelectorAll('[data-filter]');
+    const projectCards = document.querySelectorAll('.project-card');
+    const noResults = document.getElementById('no-results');
+    
+    function filterProjects(filter) {
+        let visibleCount = 0;
+        
+        projectCards.forEach(card => {
+            if (filter === 'all' || card.getAttribute('data-category') === filter) {
+                card.style.display = 'block';
+                card.classList.remove('hidden');
+                visibleCount++;
+            } else {
+                card.style.display = 'none';
+                card.classList.add('hidden');
+            }
+        });
+        
+        // Show/hide no results message
+        if (visibleCount === 0) {
+            noResults.style.display = 'block';
+        } else {
+            noResults.style.display = 'none';
+        }
+    }
+    
+    filterButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const filter = this.getAttribute('data-filter');
+            
+            // Update active button
+            filterButtons.forEach(btn => btn.classList.remove('active'));
+            this.classList.add('active');
+            
+            // Filter projects
+            filterProjects(filter);
+        });
+    });
+    
+    // Reset filters function
+    window.resetFilters = function() {
+        filterButtons.forEach(btn => btn.classList.remove('active'));
+        filterButtons[0].classList.add('active'); // Activate "All Projects"
+        filterProjects('all');
+    };
+});
+</script>
+{% endblock %}

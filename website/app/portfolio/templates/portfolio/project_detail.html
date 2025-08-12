@@ -1,0 +1,397 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ project.title }}{% endblock %}
+{% block meta_description %}{{ project.summary|default:project.description|truncatewords:25 }}{% endblock %}
+
+{% block content %}
+<!-- Project Hero Section -->
+<section class="section-sm" style="padding-top: 120px;">
+    <div class="container">
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb mb-lg" style="font-size: var(--font-size-sm); color: var(--light-text); opacity: 0.8;">
+            <a href="{% url 'portfolio:index' %}" class="text-purple">Home</a>
+            <span class="mx-2">/</span>
+            <a href="{% url 'portfolio:project_list' %}" class="text-purple">Projects</a>
+            <span class="mx-2">/</span>
+            <span>{{ project.title }}</span>
+        </nav>
+        
+        <div class="grid grid-2" style="align-items: center; gap: var(--space-2xl);">
+            <!-- Project Info -->
+            <div class="animate-fadeInLeft">
+                <div class="mb-md">
+                    {% if project.category %}
+                    <span class="tag" style="background: var(--accent-purple); color: white;">{{ project.category.name }}</span>
+                    {% endif %}
+                    {% if project.featured %}
+                    <span class="tag" style="background: var(--success); color: white;">Featured</span>
+                    {% endif %}
+                    {% if project.status == 'published' %}
+                    <span class="tag">Published</span>
+                    {% else %}
+                    <span class="tag">{{ project.status|title }}</span>
+                    {% endif %}
+                </div>
+                
+                <h1 class="mb-md">{{ project.title }}</h1>
+                
+                {% if project.summary %}
+                <p class="text-xl mb-lg" style="color: var(--light-text); opacity: 0.9;">
+                    {{ project.summary }}
+                </p>
+                {% endif %}
+                
+                <!-- Project Meta -->
+                <div class="project-meta mb-lg" style="display: flex; flex-wrap: wrap; gap: var(--space-md); font-size: var(--font-size-sm); color: var(--light-text); opacity: 0.8;">
+                    {% if project.published_at %}
+                    <div class="meta-item">
+                        <i class="fas fa-calendar text-purple"></i>
+                        <span>{{ project.published_at|date:"F Y" }}</span>
+                    </div>
+                    {% endif %}
+                    {% if project.author %}
+                    <div class="meta-item">
+                        <i class="fas fa-user text-purple"></i>
+                        <span>{{ project.author.get_full_name|default:project.author.username }}</span>
+                    </div>
+                    {% endif %}
+                    <div class="meta-item">
+                        <i class="fas fa-eye text-purple"></i>
+                        <span>Case Study</span>
+                    </div>
+                </div>
+                
+                <!-- Project Links -->
+                <div class="project-actions flex gap-md">
+                    {% if project.live_url %}
+                    <a href="{{ project.live_url }}" target="_blank" class="btn btn-primary">
+                        <i class="fas fa-external-link-alt"></i>
+                        Live Demo
+                    </a>
+                    {% endif %}
+                    {% if project.repository_url %}
+                    <a href="{{ project.repository_url }}" target="_blank" class="btn btn-secondary">
+                        <i class="fab fa-github"></i>
+                        View Code
+                    </a>
+                    {% endif %}
+                    <a href="{% url 'portfolio:contact' %}" class="btn btn-ghost">
+                        <i class="fas fa-envelope"></i>
+                        Discuss Project
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Project Image -->
+            <div class="animate-fadeInRight">
+                {% if project.hero_image %}
+                <img src="{{ project.hero_image.url }}" alt="{{ project.title }}" 
+                     class="rounded-lg shadow-lg" style="width: 100%; height: auto;">
+                {% else %}
+                <div class="project-placeholder rounded-lg shadow-lg" 
+                     style="width: 100%; height: 400px; background: linear-gradient(135deg, var(--accent-purple), var(--secondary-dark)); display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-project-diagram fa-4x text-white opacity-50"></i>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Project Tags -->
+{% if project.tags.all %}
+<section class="section-sm bg-secondary">
+    <div class="container">
+        <div class="text-center">
+            <h3 class="mb-md">Technologies Used</h3>
+            <div class="project-tags" style="display: flex; flex-wrap: wrap; justify-content: center; gap: var(--space-sm);">
+                {% for tag in project.tags.all %}
+                <span class="tag" style="background: var(--purple-20); color: var(--accent-purple); padding: var(--space-sm) var(--space-md); font-size: var(--font-size-sm);">
+                    {{ tag.name }}
+                </span>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Project Description -->
+{% if project.description %}
+<section class="section">
+    <div class="container">
+        <div class="max-width-prose" style="max-width: 800px; margin: 0 auto;">
+            <div class="content-wrapper animate-fadeInUp">
+                {{ project.description|linebreaks }}
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Project Gallery -->
+{% if project.images.all %}
+<section class="section bg-secondary">
+    <div class="container">
+        <div class="text-center mb-xl">
+            <h2>Project <span class="text-purple">Gallery</span></h2>
+            <p class="text-lg opacity-90">Visual documentation and screenshots</p>
+        </div>
+        
+        <div class="grid grid-3">
+            {% for image in project.images.all %}
+            <div class="gallery-item animate-fadeInUp">
+                <img src="{{ image.image.url }}" alt="{{ image.caption|default:project.title }}" 
+                     class="rounded-lg shadow-md cursor-pointer" 
+                     style="width: 100%; height: 250px; object-fit: cover; transition: transform var(--transition-base);"
+                     onclick="openImageModal('{{ image.image.url }}', '{{ image.caption|default:project.title }}')">
+                {% if image.caption %}
+                <p class="mt-sm text-center text-sm opacity-75">{{ image.caption }}</p>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Related Projects -->
+<section class="section">
+    <div class="container">
+        <div class="text-center mb-xl">
+            <h2>Related <span class="text-purple">Projects</span></h2>
+            <p class="text-lg opacity-90">Explore more innovative AI/ML solutions</p>
+        </div>
+        
+        <div class="grid grid-3">
+            <!-- This would typically be populated with related projects based on category or tags -->
+            <div class="card text-center">
+                <i class="fas fa-plus fa-3x text-purple mb-md"></i>
+                <h4>More Projects Coming</h4>
+                <p>Additional related projects will be featured here as they're completed.</p>
+                <a href="{% url 'portfolio:project_list' %}" class="btn btn-ghost">
+                    <i class="fas fa-folder-open"></i>
+                    Browse All Projects
+                </a>
+            </div>
+            
+            <div class="card text-center">
+                <i class="fas fa-lightbulb fa-3x text-purple mb-md"></i>
+                <h4>Have an Idea?</h4>
+                <p>Interested in collaborating on a similar project or have questions about this implementation?</p>
+                <a href="{% url 'portfolio:contact' %}" class="btn btn-ghost">
+                    <i class="fas fa-comments"></i>
+                    Let's Discuss
+                </a>
+            </div>
+            
+            <div class="card text-center">
+                <i class="fas fa-share-alt fa-3x text-purple mb-md"></i>
+                <h4>Share This Project</h4>
+                <p>Found this project interesting? Share it with your network and colleagues.</p>
+                <div class="social-share flex justify-center gap-sm mt-md">
+                    <a href="#" class="social-link" onclick="shareProject('twitter')" aria-label="Share on Twitter">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="social-link" onclick="shareProject('linkedin')" aria-label="Share on LinkedIn">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="#" class="social-link" onclick="shareProject('email')" aria-label="Share via Email">
+                        <i class="fas fa-envelope"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action -->
+<section class="section bg-secondary">
+    <div class="container text-center">
+        <div class="animate-fadeInUp">
+            <h2 class="mb-md">Interested in <span class="text-purple">Similar Solutions</span>?</h2>
+            <p class="text-lg mb-xl opacity-90">
+                Let's discuss how we can apply similar AI/ML approaches to solve your business challenges.
+            </p>
+            <div class="flex gap-md justify-center">
+                <a href="{% url 'portfolio:contact' %}" class="btn btn-primary btn-lg">
+                    <i class="fas fa-rocket"></i>
+                    Start Your Project
+                </a>
+                <a href="{% url 'portfolio:project_list' %}" class="btn btn-secondary btn-lg">
+                    <i class="fas fa-folder-open"></i>
+                    Explore More Projects
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Image Modal -->
+<div id="imageModal" class="modal" style="display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(30, 32, 44, 0.9);">
+    <div class="modal-content" style="position: relative; margin: auto; padding: 20px; width: 90%; max-width: 800px; top: 50%; transform: translateY(-50%);">
+        <span class="close" onclick="closeImageModal()" style="color: var(--white); float: right; font-size: 28px; font-weight: bold; cursor: pointer; position: absolute; right: 10px; top: 10px;">&times;</span>
+        <img id="modalImage" style="width: 100%; height: auto; border-radius: var(--radius-lg);">
+        <p id="modalCaption" style="text-align: center; margin-top: var(--space-md); color: var(--light-text);"></p>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .meta-item {
+        display: flex;
+        align-items: center;
+        gap: var(--space-xs);
+    }
+    
+    .content-wrapper {
+        font-size: var(--font-size-lg);
+        line-height: 1.8;
+        color: var(--light-text);
+    }
+    
+    .content-wrapper p {
+        margin-bottom: var(--space-lg);
+    }
+    
+    .content-wrapper h2,
+    .content-wrapper h3,
+    .content-wrapper h4 {
+        color: var(--white);
+        margin-top: var(--space-xl);
+        margin-bottom: var(--space-md);
+    }
+    
+    .content-wrapper ul,
+    .content-wrapper ol {
+        margin-bottom: var(--space-lg);
+        padding-left: var(--space-lg);
+    }
+    
+    .content-wrapper li {
+        margin-bottom: var(--space-sm);
+    }
+    
+    .content-wrapper code {
+        background: var(--secondary-dark);
+        color: var(--accent-purple);
+        padding: 2px 6px;
+        border-radius: var(--radius-sm);
+        font-family: 'Courier New', monospace;
+    }
+    
+    .content-wrapper pre {
+        background: var(--secondary-dark);
+        padding: var(--space-lg);
+        border-radius: var(--radius-md);
+        overflow-x: auto;
+        margin-bottom: var(--space-lg);
+        border: 1px solid var(--purple-20);
+    }
+    
+    .gallery-item img:hover {
+        transform: scale(1.05);
+    }
+    
+    .social-share .social-link {
+        width: 35px;
+        height: 35px;
+        font-size: var(--font-size-sm);
+    }
+    
+    @media (max-width: 768px) {
+        .grid-2 {
+            grid-template-columns: 1fr;
+            gap: var(--space-lg);
+        }
+        
+        .project-actions {
+            flex-direction: column;
+        }
+        
+        .project-actions .btn {
+            width: 100%;
+        }
+        
+        .grid-3 {
+            grid-template-columns: 1fr;
+        }
+        
+        .flex.gap-md {
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .btn-lg {
+            width: 100%;
+            max-width: 300px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function openImageModal(imageSrc, caption) {
+    const modal = document.getElementById('imageModal');
+    const modalImg = document.getElementById('modalImage');
+    const modalCaption = document.getElementById('modalCaption');
+    
+    modal.style.display = 'block';
+    modalImg.src = imageSrc;
+    modalCaption.textContent = caption;
+    
+    // Prevent body scroll
+    document.body.style.overflow = 'hidden';
+}
+
+function closeImageModal() {
+    const modal = document.getElementById('imageModal');
+    modal.style.display = 'none';
+    
+    // Restore body scroll
+    document.body.style.overflow = 'auto';
+}
+
+function shareProject(platform) {
+    const url = window.location.href;
+    const title = '{{ project.title|escapejs }}';
+    const text = '{{ project.summary|escapejs|truncatewords:20 }}';
+    
+    let shareUrl = '';
+    
+    switch(platform) {
+        case 'twitter':
+            shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}`;
+            break;
+        case 'linkedin':
+            shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`;
+            break;
+        case 'email':
+            shareUrl = `mailto:?subject=${encodeURIComponent(title)}&body=${encodeURIComponent(text + ' ' + url)}`;
+            break;
+    }
+    
+    if (shareUrl) {
+        window.open(shareUrl, '_blank', 'width=600,height=400');
+    }
+}
+
+// Close modal when clicking outside of it
+window.onclick = function(event) {
+    const modal = document.getElementById('imageModal');
+    if (event.target === modal) {
+        closeImageModal();
+    }
+}
+
+// Close modal with Escape key
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        closeImageModal();
+    }
+});
+</script>
+{% endblock %}

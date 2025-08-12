@@ -1,0 +1,526 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ item.title }}{% endblock %}
+{% block meta_description %}{{ item.summary|default:item.content|striptags|truncatewords:25 }}{% endblock %}
+
+{% block content %}
+<!-- News Detail Header -->
+<section class="section-sm" style="padding-top: 120px;">
+    <div class="container">
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb mb-lg" style="font-size: var(--font-size-sm); color: var(--light-text); opacity: 0.8;">
+            <a href="{% url 'portfolio:index' %}" class="text-purple">Home</a>
+            <span class="mx-2">/</span>
+            <a href="{% url 'portfolio:news' %}" class="text-purple">News</a>
+            <span class="mx-2">/</span>
+            <span>{{ item.title|truncatewords:5 }}</span>
+        </nav>
+        
+        <article class="news-detail">
+            <!-- News Header -->
+            <header class="news-header mb-xl animate-fadeInDown">
+                <div class="news-meta mb-md">
+                    <span class="news-date">
+                        <i class="fas fa-calendar text-purple"></i>
+                        {{ item.published_at|date:"F d, Y" }}
+                    </span>
+                    {% if item.category %}
+                    <span class="news-category">{{ item.category.name }}</span>
+                    {% endif %}
+                    {% if item.important %}
+                    <span class="news-featured">
+                        <i class="fas fa-star"></i>
+                        Featured
+                    </span>
+                    {% endif %}
+                    {% if item.status == 'published' %}
+                    <span class="news-status published">
+                        <i class="fas fa-check-circle"></i>
+                        Published
+                    </span>
+                    {% else %}
+                    <span class="news-status draft">
+                        <i class="fas fa-clock"></i>
+                        {{ item.status|title }}
+                    </span>
+                    {% endif %}
+                </div>
+                
+                <h1 class="news-title">{{ item.title }}</h1>
+                
+                {% if item.summary %}
+                <p class="news-summary">{{ item.summary }}</p>
+                {% endif %}
+                
+                <div class="news-author-info">
+                    {% if item.author %}
+                    <div class="author-avatar">
+                        <i class="fas fa-user fa-2x text-purple"></i>
+                    </div>
+                    <div class="author-details">
+                        <div class="author-name">{{ item.author.get_full_name|default:item.author.username }}</div>
+                        <div class="author-title">AI/ML Data Scientist</div>
+                    </div>
+                    {% endif %}
+                </div>
+            </header>
+            
+            <!-- News Content -->
+            {% if item.content %}
+            <div class="news-content max-width-prose animate-fadeInUp" style="max-width: 800px; margin: 0 auto;">
+                <div class="content-wrapper">
+                    {{ item.content|linebreaks }}
+                </div>
+            </div>
+            {% endif %}
+            
+            <!-- External Link -->
+            {% if item.link %}
+            <div class="external-link-section text-center mt-xl animate-fadeInUp">
+                <div class="card" style="max-width: 500px; margin: 0 auto; background: var(--purple-10); border: 1px solid var(--purple-20);">
+                    <i class="fas fa-external-link-alt fa-2x text-purple mb-md"></i>
+                    <h4>Related Resource</h4>
+                    <p class="mb-md opacity-90">Additional information and details are available at the external link below.</p>
+                    <a href="{{ item.link }}" target="_blank" class="btn btn-primary">
+                        <i class="fas fa-arrow-right"></i>
+                        View External Resource
+                    </a>
+                </div>
+            </div>
+            {% endif %}
+            
+            <!-- News Footer -->
+            <footer class="news-footer mt-xl animate-fadeInUp">
+                <div class="news-actions">
+                    <div class="share-section">
+                        <h4>Share this update</h4>
+                        <div class="social-share flex gap-md">
+                            <a href="#" class="social-link" onclick="shareNews('twitter')" aria-label="Share on Twitter">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                            <a href="#" class="social-link" onclick="shareNews('linkedin')" aria-label="Share on LinkedIn">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                            <a href="#" class="social-link" onclick="shareNews('facebook')" aria-label="Share on Facebook">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                            <a href="#" class="social-link" onclick="shareNews('email')" aria-label="Share via Email">
+                                <i class="fas fa-envelope"></i>
+                            </a>
+                            <a href="#" class="social-link" onclick="copyToClipboard()" aria-label="Copy Link">
+                                <i class="fas fa-link"></i>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="news-navigation">
+                        <a href="{% url 'portfolio:news' %}" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i>
+                            Back to News
+                        </a>
+                        <a href="{% url 'portfolio:contact' %}" class="btn btn-primary">
+                            <i class="fas fa-comments"></i>
+                            Discuss This
+                        </a>
+                    </div>
+                </div>
+            </footer>
+        </article>
+    </div>
+</section>
+
+<!-- Related Updates -->
+<section class="section bg-secondary">
+    <div class="container">
+        <div class="text-center mb-xl">
+            <h2>Related <span class="text-purple">Updates</span></h2>
+            <p class="text-lg opacity-90">More news and achievements</p>
+        </div>
+        
+        <div class="grid grid-3">
+            <!-- Placeholder for related news items -->
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-trophy fa-2x text-purple mb-md"></i>
+                    <h4>Recent Achievement</h4>
+                </div>
+                <div class="card-body">
+                    <p>Latest recognition and awards in AI/ML innovation and technical excellence.</p>
+                </div>
+                <div class="card-footer">
+                    <a href="{% url 'portfolio:news' %}" class="btn btn-ghost btn-sm">
+                        <i class="fas fa-arrow-right"></i>
+                        View More
+                    </a>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-rocket fa-2x text-purple mb-md"></i>
+                    <h4>Project Launch</h4>
+                </div>
+                <div class="card-body">
+                    <p>New AI/ML project launches and innovative solution deployments.</p>
+                </div>
+                <div class="card-footer">
+                    <a href="{% url 'portfolio:project_list' %}" class="btn btn-ghost btn-sm">
+                        <i class="fas fa-folder-open"></i>
+                        View Projects
+                    </a>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-microphone fa-2x text-purple mb-md"></i>
+                    <h4>Speaking Engagement</h4>
+                </div>
+                <div class="card-body">
+                    <p>Conference presentations and thought leadership in AI/ML community.</p>
+                </div>
+                <div class="card-footer">
+                    <a href="{% url 'portfolio:experience' %}" class="btn btn-ghost btn-sm">
+                        <i class="fas fa-user-tie"></i>
+                        View Experience
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Newsletter Signup -->
+<section class="section">
+    <div class="container">
+        <div class="text-center">
+            <div class="card" style="max-width: 600px; margin: 0 auto;">
+                <div class="animate-fadeInUp">
+                    <h2 class="mb-md">Stay Updated with <span class="text-purple">Latest News</span></h2>
+                    <p class="mb-lg opacity-90">
+                        Subscribe to receive notifications about new achievements, project updates, and professional milestones.
+                    </p>
+                    
+                    <form class="newsletter-form" style="display: flex; gap: var(--space-sm); max-width: 400px; margin: 0 auto;">
+                        <input type="email" class="form-input" placeholder="Enter your email" required style="flex: 1;">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-bell"></i>
+                            Subscribe
+                        </button>
+                    </form>
+                    
+                    <p class="mt-md text-sm opacity-75">
+                        <i class="fas fa-shield-alt text-purple"></i>
+                        No spam, unsubscribe anytime.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .news-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-md);
+        font-size: var(--font-size-sm);
+        margin-bottom: var(--space-lg);
+    }
+    
+    .news-meta > span {
+        display: flex;
+        align-items: center;
+        gap: var(--space-xs);
+        padding: var(--space-xs) var(--space-sm);
+        border-radius: var(--radius-full);
+    }
+    
+    .news-date {
+        color: var(--light-text);
+        opacity: 0.8;
+    }
+    
+    .news-category {
+        background: var(--purple-20);
+        color: var(--accent-purple);
+    }
+    
+    .news-featured {
+        background: var(--accent-purple);
+        color: var(--white);
+    }
+    
+    .news-status.published {
+        background: rgba(34, 197, 94, 0.2);
+        color: #22c55e;
+    }
+    
+    .news-status.draft {
+        background: rgba(251, 191, 36, 0.2);
+        color: #fbbf24;
+    }
+    
+    .news-title {
+        font-size: clamp(2rem, 5vw, 3rem);
+        font-weight: 700;
+        line-height: 1.2;
+        margin-bottom: var(--space-md);
+        color: var(--white);
+    }
+    
+    .news-summary {
+        font-size: var(--font-size-xl);
+        color: var(--light-text);
+        opacity: 0.9;
+        line-height: 1.6;
+        max-width: 700px;
+        margin: 0 auto var(--space-xl);
+    }
+    
+    .news-author-info {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--space-md);
+        margin-top: var(--space-xl);
+    }
+    
+    .author-avatar {
+        width: 60px;
+        height: 60px;
+        background: var(--purple-20);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .author-details {
+        text-align: left;
+    }
+    
+    .author-name {
+        font-weight: 600;
+        color: var(--white);
+        font-size: var(--font-size-lg);
+    }
+    
+    .author-title {
+        color: var(--accent-purple);
+        font-size: var(--font-size-sm);
+    }
+    
+    .content-wrapper {
+        font-size: var(--font-size-lg);
+        line-height: 1.8;
+        color: var(--light-text);
+    }
+    
+    .content-wrapper p {
+        margin-bottom: var(--space-lg);
+    }
+    
+    .content-wrapper h2,
+    .content-wrapper h3,
+    .content-wrapper h4 {
+        color: var(--white);
+        margin-top: var(--space-2xl);
+        margin-bottom: var(--space-md);
+    }
+    
+    .content-wrapper h2 {
+        font-size: var(--font-size-2xl);
+        border-bottom: 2px solid var(--purple-20);
+        padding-bottom: var(--space-sm);
+    }
+    
+    .content-wrapper ul,
+    .content-wrapper ol {
+        margin-bottom: var(--space-lg);
+        padding-left: var(--space-xl);
+    }
+    
+    .content-wrapper li {
+        margin-bottom: var(--space-sm);
+    }
+    
+    .content-wrapper blockquote {
+        background: var(--secondary-dark);
+        border-left: 4px solid var(--accent-purple);
+        margin: var(--space-xl) 0;
+        padding: var(--space-lg);
+        border-radius: var(--radius-md);
+        font-style: italic;
+    }
+    
+    .external-link-section .card {
+        text-align: center;
+        padding: var(--space-xl);
+    }
+    
+    .news-footer {
+        border-top: 1px solid var(--purple-20);
+        padding-top: var(--space-xl);
+    }
+    
+    .news-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--space-xl);
+        align-items: center;
+    }
+    
+    .share-section h4 {
+        margin-bottom: var(--space-md);
+        color: var(--white);
+    }
+    
+    .news-navigation {
+        display: flex;
+        gap: var(--space-md);
+        justify-content: flex-end;
+    }
+    
+    .newsletter-form input {
+        margin-bottom: 0;
+    }
+    
+    @media (max-width: 768px) {
+        .news-meta {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: var(--space-sm);
+        }
+        
+        .news-author-info {
+            flex-direction: column;
+            text-align: center;
+        }
+        
+        .author-details {
+            text-align: center;
+        }
+        
+        .news-actions {
+            grid-template-columns: 1fr;
+            gap: var(--space-lg);
+            text-align: center;
+        }
+        
+        .news-navigation {
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .news-navigation .btn {
+            width: 100%;
+        }
+        
+        .newsletter-form {
+            flex-direction: column;
+        }
+        
+        .newsletter-form .btn {
+            width: 100%;
+        }
+        
+        .grid-3 {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function shareNews(platform) {
+    const url = window.location.href;
+    const title = '{{ item.title|escapejs }}';
+    const text = '{{ item.summary|default:item.content|striptags|truncatewords:20|escapejs }}';
+    
+    let shareUrl = '';
+    
+    switch(platform) {
+        case 'twitter':
+            shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}`;
+            break;
+        case 'linkedin':
+            shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`;
+            break;
+        case 'facebook':
+            shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+            break;
+        case 'email':
+            shareUrl = `mailto:?subject=${encodeURIComponent(title)}&body=${encodeURIComponent(text + ' ' + url)}`;
+            break;
+    }
+    
+    if (shareUrl) {
+        window.open(shareUrl, '_blank', 'width=600,height=400');
+    }
+}
+
+function copyToClipboard() {
+    const url = window.location.href;
+    
+    if (navigator.clipboard && window.isSecureContext) {
+        // Use the Clipboard API
+        navigator.clipboard.writeText(url).then(() => {
+            showCopySuccess();
+        });
+    } else {
+        // Fallback for older browsers
+        const textArea = document.createElement('textarea');
+        textArea.value = url;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+        showCopySuccess();
+    }
+}
+
+function showCopySuccess() {
+    const copyButton = document.querySelector('[onclick="copyToClipboard()"]');
+    const originalIcon = copyButton.innerHTML;
+    
+    copyButton.innerHTML = '<i class="fas fa-check"></i>';
+    copyButton.style.color = 'var(--success)';
+    
+    setTimeout(() => {
+        copyButton.innerHTML = originalIcon;
+        copyButton.style.color = '';
+    }, 2000);
+}
+
+// Newsletter form handling
+document.addEventListener('DOMContentLoaded', function() {
+    const newsletterForm = document.querySelector('.newsletter-form');
+    if (newsletterForm) {
+        newsletterForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = this.querySelector('input[type="email"]').value;
+            
+            // Here you would typically send the email to your backend
+            console.log('Newsletter signup:', email);
+            
+            // Show success message
+            const button = this.querySelector('button');
+            const originalText = button.innerHTML;
+            button.innerHTML = '<i class="fas fa-check"></i> Subscribed!';
+            button.disabled = true;
+            
+            setTimeout(() => {
+                button.innerHTML = originalText;
+                button.disabled = false;
+                this.reset();
+            }, 3000);
+        });
+    }
+});
+</script>
+{% endblock %}

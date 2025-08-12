@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{% block meta_description %}AI/ML Data Scientist Portfolio - Expert in Deep Learning, Neural Networks, and Agentic AI Systems{% endblock %}">
+    <meta name="keywords" content="{% block meta_keywords %}AI, Machine Learning, Data Science, Deep Learning, Python, TensorFlow, PyTorch, Neural Networks, Computer Vision, NLP{% endblock %}">
+    <meta name="author" content="{% block meta_author %}Your Name{% endblock %}">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{% block og_url %}{{ request.build_absolute_uri }}{% endblock %}">
+    <meta property="og:title" content="{% block og_title %}{% block title %}AI/ML Portfolio{% endblock %}{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}{% block meta_description %}AI/ML Data Scientist Portfolio - Expert in Deep Learning, Neural Networks, and Agentic AI Systems{% endblock %}{% endblock %}">
+    <meta property="og:image" content="{% block og_image %}{% load static %}{% static 'media/images/og-image.jpg' %}{% endblock %}">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="{% block twitter_url %}{{ request.build_absolute_uri }}{% endblock %}">
+    <meta property="twitter:title" content="{% block twitter_title %}{% block title %}AI/ML Portfolio{% endblock %}{% endblock %}">
+    <meta property="twitter:description" content="{% block twitter_description %}{% block meta_description %}AI/ML Data Scientist Portfolio - Expert in Deep Learning, Neural Networks, and Agentic AI Systems{% endblock %}{% endblock %}">
+    <meta property="twitter:image" content="{% block twitter_image %}{% load static %}{% static 'media/images/twitter-image.jpg' %}{% endblock %}">
+    
+    <title>{% block page_title %}{% block title %}AI/ML Portfolio{% endblock %} | Data Scientist{% endblock %}</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{% load static %}{% static 'media/images/favicon.ico' %}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{% load static %}{% static 'media/images/apple-touch-icon.png' %}">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/site.css' %}">
+    
+    <!-- Additional CSS -->
+    {% block extra_css %}{% endblock %}
+    
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Your Name",
+        "jobTitle": "AI/ML Data Scientist",
+        "url": "{{ request.build_absolute_uri }}",
+        "sameAs": [
+            "https://linkedin.com/in/yourprofile",
+            "https://github.com/yourusername",
+            "https://twitter.com/yourusername"
+        ],
+        "knowsAbout": [
+            "Artificial Intelligence",
+            "Machine Learning",
+            "Deep Learning",
+            "Neural Networks",
+            "Computer Vision",
+            "Natural Language Processing",
+            "Data Science",
+            "Python Programming",
+            "TensorFlow",
+            "PyTorch"
+        ]
+    }
+    </script>
+</head>
+<body>
+    <!-- Navigation Header -->
+    <header class="header">
+        <nav class="nav container">
+            <a href="{% url 'portfolio:index' %}" class="nav-brand">
+                <i class="fas fa-brain text-purple"></i>
+                AI Portfolio
+            </a>
+            
+            <button class="nav-toggle" aria-label="Toggle navigation">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <ul class="nav-menu">
+                <li><a href="{% url 'portfolio:index' %}" class="nav-link">Home</a></li>
+                <li><a href="{% url 'portfolio:project_list' %}" class="nav-link">Projects</a></li>
+                <li><a href="{% url 'portfolio:experience' %}" class="nav-link">Experience</a></li>
+                <li><a href="{% url 'portfolio:blog_list' %}" class="nav-link">Blog</a></li>
+                <li><a href="{% url 'portfolio:news' %}" class="nav-link">News</a></li>
+                <li><a href="{% url 'portfolio:contact' %}" class="nav-link">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>AI/ML Portfolio</h3>
+                    <p>Bridging the gap between complex AI research and practical business applications through elegant design and user-centered thinking.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link" aria-label="LinkedIn">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a href="#" class="social-link" aria-label="GitHub">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="#" class="social-link" aria-label="Twitter">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="social-link" aria-label="Email">
+                            <i class="fas fa-envelope"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="{% url 'portfolio:index' %}">Home</a></li>
+                        <li><a href="{% url 'portfolio:project_list' %}">Projects</a></li>
+                        <li><a href="{% url 'portfolio:experience' %}">Experience</a></li>
+                        <li><a href="{% url 'portfolio:blog_list' %}">Blog</a></li>
+                        <li><a href="{% url 'portfolio:contact' %}">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Expertise</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Artificial Intelligence</a></li>
+                        <li><a href="#">Machine Learning</a></li>
+                        <li><a href="#">Deep Learning</a></li>
+                        <li><a href="#">Computer Vision</a></li>
+                        <li><a href="#">Natural Language Processing</a></li>
+                        <li><a href="#">Agentic AI Systems</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Contact Info</h3>
+                    <ul class="footer-links">
+                        <li><i class="fas fa-envelope text-purple"></i> your.email@domain.com</li>
+                        <li><i class="fas fa-phone text-purple"></i> +1 (555) 123-4567</li>
+                        <li><i class="fas fa-map-marker-alt text-purple"></i> Your City, Country</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 AI/ML Portfolio. All rights reserved. | Designed with <span class="text-purple">passion</span> for innovation.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(30, 32, 44, 0.9); z-index: 9999; display: flex; align-items: center; justify-content: center;">
+        <div class="loading-spinner" style="width: 50px; height: 50px; border: 3px solid var(--purple-20); border-top: 3px solid var(--accent-purple); border-radius: 50%; animation: spin 1s linear infinite;"></div>
+    </div>
+
+    <style>
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .loading-spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--purple-20);
+            border-top: 2px solid var(--accent-purple);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            margin-right: 8px;
+        }
+    </style>
+
+    <!-- JavaScript -->
+    <script src="{% static 'js/site.js' %}"></script>
+    
+    <!-- Additional JavaScript -->
+    {% block extra_js %}{% endblock %}
+    
+    <!-- Analytics (Add your tracking code here) -->
+    {% if not debug %}
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'GA_MEASUREMENT_ID');
+    </script>
+    {% endif %}
+</body>
+</html>

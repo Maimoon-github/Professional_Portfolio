@@ -1,0 +1,430 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Experience{% endblock %}
+{% block meta_description %}Professional experience and career journey as an AI/ML Data Scientist. Explore my roles, achievements, and technical skills development.{% endblock %}
+
+{% block content %}
+<!-- Experience Header -->
+<section class="section-sm" style="padding-top: 120px;">
+    <div class="container">
+        <div class="text-center mb-xl">
+            <h1 class="animate-fadeInDown">Professional <span class="text-purple">Experience</span></h1>
+            <p class="text-lg opacity-90">
+                A journey through AI/ML innovation, technical leadership, and continuous learning
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- Skills Overview Section -->
+{% if skills %}
+<section class="section bg-secondary">
+    <div class="container">
+        <div class="text-center mb-xl">
+            <h2 class="animate-fadeInDown">Technical <span class="text-purple">Skills</span></h2>
+            <p class="text-lg opacity-90">
+                Core competencies and proficiency levels across the AI/ML technology stack
+            </p>
+        </div>
+        
+        <div class="skills-grid">
+            {% regroup skills by category as skill_categories %}
+            {% for category in skill_categories %}
+            <div class="skill-category animate-fadeInUp">
+                <h3>
+                    {% if category.grouper == "AI/ML" %}
+                        <i class="fas fa-brain"></i>
+                    {% elif category.grouper == "Programming" %}
+                        <i class="fas fa-code"></i>
+                    {% elif category.grouper == "Data Science" %}
+                        <i class="fas fa-chart-bar"></i>
+                    {% elif category.grouper == "Cloud & DevOps" %}
+                        <i class="fas fa-cloud"></i>
+                    {% elif category.grouper == "Web Development" %}
+                        <i class="fas fa-globe"></i>
+                    {% else %}
+                        <i class="fas fa-cog"></i>
+                    {% endif %}
+                    {{ category.grouper|default:"Technical Skills" }}
+                </h3>
+                
+                {% for skill in category.list %}
+                <div class="skill-item">
+                    <div class="skill-info">
+                        <span class="skill-name">{{ skill.name }}</span>
+                    </div>
+                    <div class="skill-level">
+                        <div class="skill-bar">
+                            <div class="skill-progress" data-percentage="{{ skill.proficiency }}" style="width: 0%;"></div>
+                        </div>
+                        <span class="skill-percentage">{{ skill.proficiency }}%</span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% empty %}
+            <div class="skill-category">
+                <h3><i class="fas fa-cog"></i> Technical Skills</h3>
+                <p class="text-center opacity-75">Skills data will be displayed here once configured.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Professional Experience Timeline -->
+{% if experiences %}
+<section class="section">
+    <div class="container">
+        <div class="text-center mb-xl">
+            <h2 class="animate-fadeInDown">Career <span class="text-purple">Journey</span></h2>
+            <p class="text-lg opacity-90">
+                Professional roles, achievements, and contributions to AI/ML innovation
+            </p>
+        </div>
+        
+        <div class="timeline">
+            {% for experience in experiences %}
+            <div class="timeline-item {% if experience.is_current %}current{% endif %} animate-fadeInLeft">
+                <div class="timeline-date">
+                    {% if experience.is_current %}
+                        {{ experience.start_date|date:"M Y" }} - Present
+                        <span class="tag" style="background: var(--accent-purple); color: white; margin-left: var(--space-sm);">Current</span>
+                    {% else %}
+                        {{ experience.start_date|date:"M Y" }} - {{ experience.end_date|date:"M Y" }}
+                    {% endif %}
+                </div>
+                
+                <h3 class="timeline-title">{{ experience.role }}</h3>
+                <div class="timeline-company">
+                    <i class="fas fa-building text-purple"></i>
+                    {{ experience.company }}
+                    {% if experience.location %}
+                    <span class="timeline-location">
+                        <i class="fas fa-map-marker-alt text-purple"></i>
+                        {{ experience.location }}
+                    </span>
+                    {% endif %}
+                </div>
+                
+                {% if experience.description %}
+                <div class="timeline-description">
+                    {{ experience.description|linebreaks }}
+                </div>
+                {% endif %}
+                
+                <!-- Duration Badge -->
+                <div class="timeline-duration mt-md">
+                    {% if experience.is_current %}
+                        {% now "Y-m-d" as current_date %}
+                        <span class="tag">
+                            <i class="fas fa-clock"></i>
+                            Ongoing Position
+                        </span>
+                    {% else %}
+                        <span class="tag">
+                            <i class="fas fa-calendar-alt"></i>
+                            {% widthratio experience.end_date.year|add:"-1" experience.start_date.year 12 %} year{% if experience.end_date.year|add:experience.start_date.year > 1 %}s{% endif %}
+                        </span>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% else %}
+<section class="section">
+    <div class="container">
+        <div class="text-center">
+            <div class="card" style="max-width: 500px; margin: 0 auto;">
+                <i class="fas fa-briefcase fa-3x text-purple mb-md"></i>
+                <h3>Experience Details Coming Soon</h3>
+                <p>Professional experience information will be available here once the data is configured.</p>
+                <a href="{% url 'portfolio:contact' %}" class="btn btn-primary">
+                    <i class="fas fa-envelope"></i>
+                    Contact for Details
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Education Section -->
+<section class="section bg-secondary">
+    <div class="container">
+        <div class="text-center mb-xl">
+            <h2 class="animate-fadeInDown">Education & <span class="text-purple">Certifications</span></h2>
+            <p class="text-lg opacity-90">
+                Academic background and continuous learning journey
+            </p>
+        </div>
+        
+        <!-- Education cards would go here -->
+        <div class="grid grid-2">
+            <div class="card text-center animate-fadeInUp">
+                <i class="fas fa-graduation-cap fa-3x text-purple mb-md"></i>
+                <h4>Academic Credentials</h4>
+                <p>Advanced degrees and specialized education in AI/ML, Computer Science, and related fields.</p>
+                <div class="education-tags">
+                    <span class="tag">Computer Science</span>
+                    <span class="tag">Machine Learning</span>
+                    <span class="tag">Data Science</span>
+                </div>
+            </div>
+            
+            <div class="card text-center animate-fadeInUp">
+                <i class="fas fa-certificate fa-3x text-purple mb-md"></i>
+                <h4>Professional Certifications</h4>
+                <p>Industry-recognized certifications from leading technology companies and institutions.</p>
+                <div class="education-tags">
+                    <span class="tag">AWS Certified</span>
+                    <span class="tag">Google Cloud</span>
+                    <span class="tag">TensorFlow</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Achievements & Recognition -->
+<section class="section">
+    <div class="container">
+        <div class="text-center mb-xl">
+            <h2 class="animate-fadeInDown">Achievements & <span class="text-purple">Recognition</span></h2>
+            <p class="text-lg opacity-90">
+                Notable accomplishments and industry recognition
+            </p>
+        </div>
+        
+        <div class="grid grid-3">
+            <div class="card text-center animate-fadeInUp">
+                <div class="achievement-icon mb-md">
+                    <i class="fas fa-trophy fa-3x text-purple"></i>
+                </div>
+                <h4>Industry Awards</h4>
+                <p>Recognition for innovative AI/ML solutions and technical excellence in various competitions and industry events.</p>
+                <div class="achievement-meta">
+                    <span class="tag">Innovation Award</span>
+                    <span class="tag">Best Paper</span>
+                </div>
+            </div>
+            
+            <div class="card text-center animate-fadeInUp">
+                <div class="achievement-icon mb-md">
+                    <i class="fas fa-users fa-3x text-purple"></i>
+                </div>
+                <h4>Community Contributions</h4>
+                <p>Active participation in AI/ML communities, open-source contributions, and knowledge sharing initiatives.</p>
+                <div class="achievement-meta">
+                    <span class="tag">Open Source</span>
+                    <span class="tag">Mentoring</span>
+                </div>
+            </div>
+            
+            <div class="card text-center animate-fadeInUp">
+                <div class="achievement-icon mb-md">
+                    <i class="fas fa-microphone fa-3x text-purple"></i>
+                </div>
+                <h4>Speaking & Publications</h4>
+                <p>Technical presentations, research publications, and thought leadership in AI/ML conferences and journals.</p>
+                <div class="achievement-meta">
+                    <span class="tag">Conference Speaker</span>
+                    <span class="tag">Publications</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Professional Philosophy -->
+<section class="section bg-secondary">
+    <div class="container">
+        <div class="text-center mb-xl">
+            <h2 class="animate-fadeInDown">Professional <span class="text-purple">Philosophy</span></h2>
+        </div>
+        
+        <div class="max-width-prose" style="max-width: 800px; margin: 0 auto;">
+            <div class="card text-center animate-fadeInUp">
+                <blockquote style="font-size: var(--font-size-xl); line-height: 1.6; color: var(--light-text); font-style: italic; margin-bottom: var(--space-lg);">
+                    "Bridging the gap between complex AI research and practical business applications through elegant design and user-centered thinking."
+                </blockquote>
+                <div class="philosophy-points grid grid-2" style="text-align: left; gap: var(--space-lg);">
+                    <div>
+                        <h4><i class="fas fa-lightbulb text-purple"></i> Innovation Focus</h4>
+                        <p>Constantly exploring cutting-edge AI/ML technologies and methodologies to solve real-world problems.</p>
+                    </div>
+                    <div>
+                        <h4><i class="fas fa-handshake text-purple"></i> Collaborative Approach</h4>
+                        <p>Building strong partnerships with stakeholders to ensure AI solutions align with business objectives.</p>
+                    </div>
+                    <div>
+                        <h4><i class="fas fa-rocket text-purple"></i> Continuous Learning</h4>
+                        <p>Staying current with rapidly evolving AI/ML landscape through continuous education and experimentation.</p>
+                    </div>
+                    <div>
+                        <h4><i class="fas fa-users text-purple"></i> Knowledge Sharing</h4>
+                        <p>Contributing to the AI/ML community through mentoring, open-source projects, and thought leadership.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action -->
+<section class="section">
+    <div class="container text-center">
+        <div class="animate-fadeInUp">
+            <h2 class="mb-md">Ready to <span class="text-purple">Collaborate</span>?</h2>
+            <p class="text-lg mb-xl opacity-90">
+                Let's discuss how my experience and expertise can contribute to your next AI/ML project.
+            </p>
+            <div class="flex gap-md justify-center">
+                <a href="{% url 'portfolio:contact' %}" class="btn btn-primary btn-lg">
+                    <i class="fas fa-handshake"></i>
+                    Start a Conversation
+                </a>
+                <a href="{% url 'portfolio:project_list' %}" class="btn btn-secondary btn-lg">
+                    <i class="fas fa-folder-open"></i>
+                    View My Work
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .timeline-company {
+        display: flex;
+        align-items: center;
+        gap: var(--space-sm);
+        margin-bottom: var(--space-md);
+        font-size: var(--font-size-lg);
+        color: var(--light-text);
+    }
+    
+    .timeline-location {
+        margin-left: var(--space-md);
+        display: flex;
+        align-items: center;
+        gap: var(--space-xs);
+        font-size: var(--font-size-base);
+        opacity: 0.8;
+    }
+    
+    .timeline-duration .tag {
+        background: var(--purple-20);
+        color: var(--accent-purple);
+    }
+    
+    .education-tags,
+    .achievement-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-xs);
+        justify-content: center;
+        margin-top: var(--space-md);
+    }
+    
+    .achievement-icon {
+        transition: transform var(--transition-base);
+    }
+    
+    .card:hover .achievement-icon {
+        transform: scale(1.1);
+    }
+    
+    .philosophy-points h4 {
+        display: flex;
+        align-items: center;
+        gap: var(--space-sm);
+        margin-bottom: var(--space-sm);
+        color: var(--white);
+    }
+    
+    .skill-info {
+        flex: 1;
+    }
+    
+    .skill-level {
+        display: flex;
+        align-items: center;
+        gap: var(--space-sm);
+        min-width: 150px;
+    }
+    
+    @media (max-width: 768px) {
+        .timeline-company {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: var(--space-xs);
+        }
+        
+        .timeline-location {
+            margin-left: 0;
+        }
+        
+        .philosophy-points.grid-2 {
+            grid-template-columns: 1fr;
+        }
+        
+        .skill-level {
+            min-width: 120px;
+        }
+        
+        .skill-bar {
+            width: 80px;
+        }
+        
+        .flex.gap-md {
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .btn-lg {
+            width: 100%;
+            max-width: 300px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Animate skill bars when they come into view
+    const skillBars = document.querySelectorAll('.skill-progress');
+    
+    const observerOptions = {
+        threshold: 0.5,
+        rootMargin: '0px 0px -100px 0px'
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const skillBar = entry.target;
+                const percentage = skillBar.getAttribute('data-percentage');
+                
+                // Animate the skill bar
+                setTimeout(() => {
+                    skillBar.style.width = percentage + '%';
+                }, 200);
+                
+                observer.unobserve(skillBar);
+            }
+        });
+    }, observerOptions);
+    
+    skillBars.forEach(bar => {
+        observer.observe(bar);
+    });
+});
+</script>
+{% endblock %}
