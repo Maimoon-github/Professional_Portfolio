@@ -10,18 +10,18 @@
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="{% block og_url %}{{ request.build_absolute_uri }}{% endblock %}">
-    <meta property="og:title" content="{% block og_title %}{% block title %}AI/ML Portfolio{% endblock %}{% endblock %}">
-    <meta property="og:description" content="{% block og_description %}{% block meta_description %}AI/ML Data Scientist Portfolio - Expert in Deep Learning, Neural Networks, and Agentic AI Systems{% endblock %}{% endblock %}">
+    <meta property="og:title" content="{% block og_title %}AI/ML Portfolio{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}AI/ML Data Scientist Portfolio - Expert in Deep Learning, Neural Networks, and Agentic AI Systems{% endblock %}">
     <meta property="og:image" content="{% block og_image %}{% load static %}{% static 'media/images/og-image.jpg' %}{% endblock %}">
     
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="{% block twitter_url %}{{ request.build_absolute_uri }}{% endblock %}">
-    <meta property="twitter:title" content="{% block twitter_title %}{% block title %}AI/ML Portfolio{% endblock %}{% endblock %}">
-    <meta property="twitter:description" content="{% block twitter_description %}{% block meta_description %}AI/ML Data Scientist Portfolio - Expert in Deep Learning, Neural Networks, and Agentic AI Systems{% endblock %}{% endblock %}">
+    <meta property="twitter:title" content="{% block twitter_title %}AI/ML Portfolio{% endblock %}">
+    <meta property="twitter:description" content="{% block twitter_description %}AI/ML Data Scientist Portfolio - Expert in Deep Learning, Neural Networks, and Agentic AI Systems{% endblock %}">
     <meta property="twitter:image" content="{% block twitter_image %}{% load static %}{% static 'media/images/twitter-image.jpg' %}{% endblock %}">
     
-    <title>{% block page_title %}{% block title %}AI/ML Portfolio{% endblock %} | Data Scientist{% endblock %}</title>
+    <title>{% block title %}AI/ML Portfolio | Data Scientist{% endblock %}</title>
     
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{% load static %}{% static 'media/images/favicon.ico' %}">
