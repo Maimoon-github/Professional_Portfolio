@@ -56,11 +56,7 @@ urlpatterns = [
     # Public portfolio app (namespaced "portfolio")
     path('portfolio/', include('app.portfolio.urls')),
 
-    # Dashboard (namespaced "dashboard") – mounted at /dashboard/
-    path('dashboard/', include('app.dashboard.urls', namespace='dashboard')),
-
-    # Backwards compatibility / convenience redirect (user tried /admin-dashboard)
-    path('admin-dashboard/', RedirectView.as_view(url='/dashboard/', permanent=False)),
+    # Dashboard removed - using Django admin interface instead
 
     # Root path serves portfolio landing
     path('', portfolio_views.index, name='portfolio_landing'),

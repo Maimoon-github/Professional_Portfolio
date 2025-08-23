@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'app.portfolio.apps.PortfolioConfig',  # Custom app for portfolio (AppConfig)
-    'app.dashboard.apps.DashboardConfig',  # Separated dashboard logic
+    # Dashboard app removed - using Django admin instead
     'taggit',  # Tagging
     'simple_history',  # Content versioning
     'rest_framework',  # API framework
