@@ -1641,17 +1641,17 @@ a:hover {
     margin-right: 0.25rem;
 }
 
-/* Dashboard Link Styles */
-.nav-dashboard {
+/* Admin Link Styles */
+.nav-admin {
     color: var(--accent-purple) !important;
     font-weight: var(--font-weight-medium);
 }
 
-.nav-dashboard i {
+.nav-admin i {
     margin-right: 0.25rem;
 }
 
-.nav-dashboard.active {
+.nav-admin.active {
     color: var(--purple-90) !important;
 }
 

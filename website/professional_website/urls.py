@@ -42,8 +42,7 @@ from app.portfolio import views as portfolio_views
 
 """Consolidated project URLConf.
 
-Fixes prior duplication where a second urlpatterns list overwrote the first,
-removing the dashboard namespace and causing NoReverseMatch in templates.
+Clean URL configuration for the professional portfolio website.
 """
 
 urlpatterns = [
